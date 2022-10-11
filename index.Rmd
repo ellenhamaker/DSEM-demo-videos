@@ -1,0 +1,26 @@
+---
+title: "Supporting materials for DSEM demo videos"
+author: "Ellen Hamaker"
+date: "October, 2022"
+mainfont: Arial
+fontsize: 12pt
+urlcolor: blue
+output:
+  html_document:
+    toc: true
+    toc_depth: 5
+    toc_float: true
+    df_print: paged
+    theme: paper
+  pdf_document:
+    latex_engine: xelatex
+    toc: yes
+    toc_depth: '5'
+params:
+  rcode: true
+  answers: true
+---
+
+Try
+
+---
