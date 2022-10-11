@@ -1,0 +1,8 @@
+name: "DSEM demo videos: Supporting materials"
+output_dir: "docs"
+navbar:
+  title: " "
+left:
+  - text: ""
+    href: index.html
+  
