@@ -1,5 +1,5 @@
 ---
-title: "Supporting materials for DSEM demo videos"
+title: "DSEM demo videos: Supporting materials"
 author: "Ellen Hamaker"
 date: "October, 2022"
 mainfont: Arial
@@ -21,6 +21,8 @@ params:
   answers: true
 ---
 
-Try
+# Introduction
+
+This page contains the Mplus input and output files, and the simulated datafiles that were used in the DSEM demo videos.
 
 ---
