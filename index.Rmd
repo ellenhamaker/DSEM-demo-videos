@@ -35,7 +35,8 @@ More information about DSEM and how it was implemented in the software package M
 The DSEM demo videos show how to use Mplus to specify specific models, and how to interpret the output. In addition, there are also videos that focus on various aspects related to DSEM analyses, such as Bayesian estimation and plotting options. 
 
 ## N=1 models
-Materials to be added later.
+The data for this example can be found  [here](https://ellenhamaker.github.io/DSEM-demo-videos/nis1model.html).
+
 
 ## Multilevel model
 Materials to be added later.

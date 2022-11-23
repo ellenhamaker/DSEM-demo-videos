@@ -1,0 +1,11 @@
+"0","library(fpp3)
+"
+"2","Warning: package ‘fpp3’ was built under R version 4.2.2"
+"2","Warning: package ‘tsibble’ was built under R version 4.2.2"
+"2","Warning: package ‘tsibbledata’ was built under R version 4.2.2"
+"2","Warning: package ‘feasts’ was built under R version 4.2.2"
+"2","Warning: package ‘fabletools’ was built under R version 4.2.2"
+"2","Warning: package ‘fable’ was built under R version 4.2.2"
+"0","library(tseries)"
+"0","library(expsmooth)"
+"2","Warning: package ‘expsmooth’ was built under R version 4.2.2"

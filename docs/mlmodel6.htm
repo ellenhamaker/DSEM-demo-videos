@@ -1,0 +1,1068 @@
+<!DOCTYPE html>
+<style>
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+a:link
+{
+    color: black;
+    text-decoration: none;
+}
+a[name]:hover
+{
+    text-decoration: none;
+}
+a:hover
+{
+    color: blue;
+    text-decoration: underline;
+}
+a:visited
+{
+    color: black;
+    text-decoration: none;
+}
+.heading
+{
+    color: black;
+    font-weight: bold;
+    font-size: 110%;
+}
+.heading:hover
+{
+    color: black;
+    font-weight: bold;
+    font-size: 110%;
+    text-decoration: none;
+}
+</style>
+
+<body style="font-family:'Courier New'; font-size:14px;">
+<p class="heading">
+Mplus VERSION 8.8<br />
+MUTHEN & MUTHEN<br />
+11/22/2022  10:27 AM<br />
+</p>
+
+<p class='heading'>OUTPUT SECTIONS</p>
+
+<ul>
+     <li><a href='#input'>Input Instructions</a></li>
+     <li><a href='#inputmessages'>Input Warnings And Errors</a></li>
+     <li><a href='#summary_analysis'>Summary Of Analysis</a></li>
+     <li><a href='#summary_data'>Summary Of Data</a></li>
+     <li><a href='#summary_missing_patterns'>Summary Of Missing Data Patterns</a></li>
+     <li><a href='#covariance_coverage'>Covariance Coverage Of Data</a></li>
+     <li><a href='#univariatess'>Univariate Sample Statistics</a></li>
+     <li><a href='#modelmessages'>Model Warnings And Errors</a></li>
+     <li><a href='#model_fit'>Model Fit Information</a></li>
+     <li><a href='#model_results'>Model Results</a></li>
+     <li><a href='#standardized_results'>Standardized Model Results</a></li>
+     <li><a href='#rsquare'>R-square</a></li>
+     <li><a href='#tech1_output'>Technical 1 Output</a></li>
+     <li><a href='#tech8_output'>Technical 8 Output</a></li>
+     <li><a href='#summary_plausible'>Summaries Of Plausible Values (n = Number Of Observations * Number Of Imputations)</a></li>
+     <li><a href='#summary_plausible_stdev'>Summary Of Plausible Standard Deviation (n = Number Of Observations)</a></li>
+     <li><a href='#plot_info'>Plot Information</a></li>
+</ul>
+<pre>
+
+<a name='input' class='heading'>INPUT INSTRUCTIONS</a>
+
+  TITLE: Multilevel DSEM model 6
+
+         Within level:
+         - no parameters at this level
+
+         Between level:
+         - two random means and four random slopes and random (log) variances
+         - all random effects are regressed on an observed predictor (which is grand mean ce
+         - an observed outcome is regressed on all random effects and observed predictor
+
+  DATA:
+      file = MLdata.dat;
+
+  VARIABLE:
+      NAMES ARE CL TE N RS time person;
+      USEVARIABLES = CL TE N RS;
+      BETWEEN = N RS;
+      CLUSTER = person;
+      LAGGED = CL(1) TE(1);
+      TINTERVAL = time(1);
+
+  DEFINE:	
+      CENTER N (GRANDMEAN);
+
+  ANALYSIS:
+      TYPE = TWOLEVEL RANDOM;
+      ESTIMATOR = BAYES;
+      PROC = 4;
+      BITER = (5000);
+
+  MODEL:
+      %WITHIN%
+      phiCL | CL ON CL&1;
+      betaCL | CL ON TE;
+      phiTE | TE ON TE&1;
+      betaTE | TE ON CL&1;
+      logVCL | CL;
+      logVTE | TE;
+
+      %BETWEEN%
+      CL TE phiCL-logVTE ON N;
+      RS ON CL TE phiCL-logVTE N;
+
+  OUTPUT:
+      TECH1 TECH8 STDYX;
+
+  PLOT:
+      TYPE = PLOT3;
+      FACTOR = ALL(100);
+
+
+<a name='inputmessages' class='heading'></a>
+
+*** WARNING
+  Input line exceeded 90 characters. Some input may be truncated.
+         - all random effects are regressed on an observed predictor (which is grand mean cen
+   1 WARNING(S) FOUND IN THE INPUT INSTRUCTIONS
+
+
+
+Multilevel DSEM model 6
+
+Within level:
+- no parameters at this level
+
+Between level:
+- two random means and four random slopes and random (log) variances
+- all random effects are regressed on an observed predictor (which is grand mean ce
+- an observed outcome is regressed on all random effects and observed predictor
+
+<a name='summary_analysis' class='heading'>SUMMARY OF ANALYSIS</a>
+
+Number of groups                                                 1
+Number of observations                                       19563
+
+Number of dependent variables                                    3
+Number of independent variables                                  3
+Number of continuous latent variables                            6
+
+Observed dependent variables
+
+  Continuous
+   RS          CL          TE
+
+Observed independent variables
+   N           CL&1        TE&1
+
+Continuous latent variables
+   PHICL       BETACL      PHITE       BETATE      LOGVCL      LOGVTE
+
+Variables with special functions
+
+  Cluster variable      PERSON
+
+  Within variables
+   CL&1        TE&1
+
+  Between variables
+   N           RS
+
+  Centering (GRANDMEAN)
+   N
+
+
+Estimator                                                    BAYES
+Specifications for Bayesian Estimation
+  Point estimate                                            MEDIAN
+  Number of Markov chain Monte Carlo (MCMC) chains               2
+  Random seed for the first chain                                0
+  Starting value information                           UNPERTURBED
+  Algorithm used for Markov chain Monte Carlo           GIBBS(PX1)
+  Convergence criterion                                  0.500D-01
+  Maximum number of iterations                               50000
+  K-th iteration used for thinning                               1
+Specifications for Bayes Factor Score Estimation
+  Number of imputed data sets                                  100
+  Iteration intervals for thinning                               1
+
+Input data file(s)
+  MLdata.dat
+Input data format  FREE
+
+
+<a name='summary_data' class='heading'>SUMMARY OF DATA</a>
+
+     Number of clusters                        200
+
+       Size (s)    Cluster ID with Size s
+
+         89        186
+         90        92
+         92        79 90 147
+         93        183 23 172
+         94        15 33 21 28 114 121 163 78 63 24
+         95        37 200 165 53 124 179 100 162 118 48 75 111 30
+         96        69 112 81 131 43 175 88 17 192 4 184 38 105 136 135
+         97        2 182 93 160 139 129 144 67 177 13 45 127 153 133 54
+                   56
+         98        87 32 159 189 96 91 142 151 193 35 137 180 138 47 72
+                   143 101 22 140 174 31 195 145 122 123 110 104 64 55
+                   198 199 191 42 74 161 5 65 99 152 157 197 20 52 7 80
+         99        14 36 95 1 11 141 26 83 134 58 49 178 9 130 40 25 171
+                   155 149 84 85 62 181 146 71 39 106 170 125 150 196 176
+                   3 44 98 128 115 50 77 164 168 46 12 57 97 107 120 187
+        100        173 156 70 10 29 109 113 126 59 132 34 116 169 108 68
+                   41 103 51 18 60 27 185 16 167 73 61 94 8 76 66 86 158
+                   117 82 102 154 19 119 194 148 166 188 190 89 6
+
+
+
+<a name='summary_missing_patterns' class='heading'>SUMMARY OF MISSING DATA PATTERNS</a>
+
+     Number of missing data patterns             4
+
+
+     MISSING DATA PATTERNS (x = not missing)
+
+           1  2  3  4
+ RS        x  x  x  x
+ CL        x  x
+ TE        x  x
+ CL&1      x     x
+ TE&1      x     x
+ N         x  x  x  x
+
+
+     MISSING DATA PATTERN FREQUENCIES
+
+    Pattern   Frequency     Pattern   Frequency     Pattern   Frequency
+          1        4993           3        4794
+          2        4994           4        4782
+
+
+<a name='covariance_coverage' class='heading'>COVARIANCE COVERAGE OF DATA</a>
+
+Minimum covariance coverage value   0.100
+
+
+     PROPORTION OF DATA PRESENT
+
+
+           Covariance Coverage
+              RS            CL            TE            N
+              ________      ________      ________      ________
+ RS             1.000
+ CL             0.511         0.511
+ TE             0.511         0.511         0.511
+ N              1.000         0.511         0.511         1.000
+
+
+
+<a name='univariatess' class='heading'>UNIVARIATE SAMPLE STATISTICS</a>
+
+
+     UNIVARIATE HIGHER-ORDER MOMENT DESCRIPTIVE STATISTICS
+
+         Variable/         Mean/     Skewness/   Minimum/ % with                Percentiles
+        Sample Size      Variance    Kurtosis    Maximum  Min/Max      20%/60%    40%/80%    Median
+
+     RS                   29.900       0.011      27.000    0.50%      29.000     30.000     30.000
+             200.000       0.860      -0.023      32.000    4.00%      30.000     31.000
+     CL                    5.182       0.119      -1.380    0.01%       3.730      4.750      5.180
+            9987.000       2.977       0.203      12.200    0.01%       5.600      6.560
+     TE                   14.915      -0.030       8.500    0.01%      13.600     14.500     14.900
+            9987.000       2.312      -0.048      19.900    0.01%      15.300     16.200
+     N                     0.000      -0.381     -30.516    0.50%      -5.716     -1.316     -0.516
+             200.000      51.518       1.229      18.284    0.50%       1.484      6.284
+
+<a name='modelmessages' class='heading'></a>
+
+THE MODEL ESTIMATION TERMINATED NORMALLY
+
+     USE THE FBITERATIONS OPTION TO INCREASE THE NUMBER OF ITERATIONS BY A FACTOR
+     OF AT LEAST TWO TO CHECK CONVERGENCE AND THAT THE PSR VALUE DOES NOT INCREASE.
+
+
+
+<a name='model_fit' class='heading'>MODEL FIT INFORMATION</a>
+
+Number of Free Parameters                              35
+
+Information Criteria
+
+          Deviance (DIC)                       129828.630
+          Estimated Number of Parameters (pD)   18515.971
+
+
+
+<a name='model_results' class='heading'>MODEL RESULTS</a>
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+
+Within Level
+
+Between Level
+
+ PHICL      ON
+    N                  0.013       0.002      0.000       0.010       0.017      *
+
+ BETACL     ON
+    N                  0.020       0.002      0.000       0.017       0.024      *
+
+ PHITE      ON
+    N                  0.012       0.002      0.000       0.007       0.016      *
+
+ BETATE     ON
+    N                  0.006       0.002      0.001       0.002       0.009      *
+
+ LOGVCL     ON
+    N                  0.006       0.004      0.065      -0.002       0.013
+
+ LOGVTE     ON
+    N                 -0.001       0.002      0.302      -0.006       0.003
+
+ RS         ON
+    PHICL              0.542       5.888      0.423      -8.060      19.662
+    BETACL             1.695       1.328      0.062      -0.424       4.732
+    PHITE              0.842       2.172      0.200      -1.086       8.160
+    BETATE             0.502       1.785      0.365      -2.612       4.734
+    LOGVCL             0.186       0.231      0.214      -0.290       0.613
+    LOGVTE             0.764       1.421      0.259      -1.609       3.936
+
+ CL         ON
+    N                 -0.098       0.011      0.000      -0.119      -0.076      *
+
+ TE         ON
+    N                  0.064       0.010      0.000       0.044       0.084      *
+
+ RS         ON
+    CL                 0.120       0.068      0.038      -0.013       0.254
+    TE                -0.194       0.074      0.004      -0.337      -0.047      *
+    N                 -0.053       0.093      0.181      -0.339       0.082
+
+ Intercepts
+    RS                32.522       1.862      0.000      28.413      35.927      *
+    CL                 5.180       0.078      0.000       5.028       5.337      *
+    TE                14.917       0.075      0.000      14.768      15.064      *
+    PHICL              0.191       0.014      0.000       0.162       0.218      *
+    BETACL            -0.313       0.013      0.000      -0.337      -0.286      *
+    PHITE              0.099       0.017      0.000       0.066       0.133      *
+    BETATE            -0.101       0.015      0.000      -0.129      -0.071      *
+    LOGVCL             0.021       0.028      0.221      -0.036       0.075
+    LOGVTE            -0.031       0.018      0.047      -0.067       0.005
+
+ Residual Variances
+    RS                 0.684       0.161      0.000       0.150       0.901      *
+    CL                 1.202       0.127      0.000       0.989       1.475      *
+    TE                 1.058       0.111      0.000       0.872       1.308      *
+    PHICL              0.004       0.003      0.000       0.001       0.011      *
+    BETACL             0.012       0.003      0.000       0.006       0.019      *
+    PHITE              0.017       0.006      0.000       0.002       0.029      *
+    BETATE             0.009       0.004      0.000       0.003       0.017      *
+    LOGVCL             0.110       0.016      0.000       0.083       0.146      *
+    LOGVTE             0.014       0.006      0.000       0.004       0.026      *
+
+
+<a name='standardized_results' class='heading'>STANDARDIZED MODEL RESULTS</a>
+
+
+STDYX Standardization
+
+                                Posterior  One-Tailed         95% C.I.
+                    Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%  Significance
+
+Within-Level Standardized Estimates Averaged Over Clusters
+
+ PHICL | CL ON
+    CL&1               0.188       0.011      0.000       0.168       0.210      *
+
+ BETACL | CL ON
+    TE                -0.286       0.009      0.000      -0.301      -0.268      *
+
+ PHITE | TE ON
+    TE&1               0.099       0.014      0.000       0.073       0.129      *
+
+ BETATE | TE ON
+    CL&1              -0.111       0.014      0.000      -0.136      -0.082      *
+
+ LOGVCL |
+    CL                 0.832       0.008      0.000       0.816       0.847      *
+
+ LOGVTE |
+    TE                 0.937       0.007      0.000       0.921       0.949      *
+
+Between Level
+
+ PHICL      ON
+    N                  0.740       0.119      0.000       0.502       0.924      *
+
+ BETACL     ON
+    N                  0.691       0.063      0.000       0.565       0.816      *
+
+ PHITE      ON
+    N                  0.428       0.127      0.000       0.263       0.834      *
+
+ BETATE     ON
+    N                  0.299       0.104      0.001       0.095       0.501      *
+
+ LOGVCL     ON
+    N                  0.084       0.058      0.065      -0.029       0.199
+
+ LOGVTE     ON
+    N                 -0.057       0.105      0.302      -0.261       0.149
+
+ RS         ON
+    PHICL              0.055       0.484      0.423      -0.658       1.555
+    BETACL             0.270       0.189      0.062      -0.067       0.686
+    PHITE              0.128       0.213      0.200      -0.157       0.753
+    BETATE             0.051       0.156      0.365      -0.232       0.391
+    LOGVCL             0.064       0.079      0.214      -0.097       0.206
+    LOGVTE             0.094       0.146      0.259      -0.190       0.382
+
+ CL         ON
+    N                 -0.413       0.042      0.000      -0.491      -0.325      *
+
+ TE         ON
+    N                  0.302       0.046      0.000       0.204       0.387      *
+
+ RS         ON
+    CL                 0.150       0.083      0.038      -0.017       0.309
+    TE                -0.217       0.080      0.004      -0.367      -0.053      *
+    N                 -0.277       0.488      0.181      -1.774       0.429
+
+ Intercepts
+    RS                33.515       2.365      0.000      28.326      37.850      *
+    CL                 4.298       0.212      0.000       3.895       4.717      *
+    TE                13.807       0.674      0.000      12.487      15.118      *
+    PHICL              2.024       0.372      0.000       1.452       2.888      *
+    BETACL            -2.081       0.195      0.000      -2.513      -1.732      *
+    PHITE              0.702       0.203      0.000       0.425       1.238      *
+    BETATE            -1.050       0.254      0.000      -1.641      -0.644      *
+    LOGVCL             0.063       0.084      0.221      -0.105       0.226
+    LOGVTE            -0.274       0.168      0.047      -0.623       0.046
+
+ Residual Variances
+    RS                 0.739       0.161      0.000       0.167       0.895      *
+    CL                 0.829       0.035      0.000       0.759       0.894      *
+    TE                 0.909       0.027      0.000       0.850       0.958      *
+    PHICL              0.452       0.172      0.000       0.147       0.748      *
+    BETACL             0.523       0.088      0.000       0.334       0.680      *
+    PHITE              0.817       0.138      0.000       0.302       0.931      *
+    BETATE             0.910       0.064      0.000       0.748       0.991      *
+    LOGVCL             0.993       0.011      0.000       0.960       1.000      *
+    LOGVTE             0.993       0.019      0.000       0.931       1.000      *
+
+
+<a name='rsquare' class='heading'>R-SQUARE</a>
+
+Within-Level R-Square Averaged Across Clusters
+
+                                Posterior  One-Tailed         95% C.I.
+    Variable        Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%
+
+    CL                 0.168       0.008      0.000       0.153       0.184
+    TE                 0.063       0.007      0.000       0.050       0.079
+
+Between Level
+
+                                Posterior  One-Tailed         95% C.I.
+    Variable        Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%
+
+    RS                 0.261       0.161      0.000       0.105       0.833
+    CL                 0.171       0.035      0.000       0.105       0.241
+    TE                 0.091       0.027      0.000       0.042       0.150
+
+                                Posterior  One-Tailed         95% C.I.
+    Variable        Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%
+
+    PHICL              0.548       0.172      0.000       0.252       0.853
+    BETACL             0.477       0.088      0.000       0.319       0.666
+    PHITE              0.183       0.138      0.000       0.069       0.696
+    BETATE             0.090       0.064      0.000       0.009       0.251
+    LOGVCL             0.007       0.011      0.000       0.000       0.040
+    LOGVTE             0.007       0.019      0.000       0.000       0.069
+
+
+<a name='tech1_output' class='heading'>TECHNICAL 1 OUTPUT</a>
+
+
+     PARAMETER SPECIFICATION FOR WITHIN
+
+
+           NU
+              CL            TE            CL&1          TE&1
+              ________      ________      ________      ________
+                    0             0             0             0
+
+
+           LAMBDA
+              CL            TE            CL&1          TE&1
+              ________      ________      ________      ________
+ CL                 0             0             0             0
+ TE                 0             0             0             0
+ CL&1               0             0             0             0
+ TE&1               0             0             0             0
+
+
+           THETA
+              CL            TE            CL&1          TE&1
+              ________      ________      ________      ________
+ CL                 0
+ TE                 0             0
+ CL&1               0             0             0
+ TE&1               0             0             0             0
+
+
+           ALPHA
+              CL            TE            CL&1          TE&1
+              ________      ________      ________      ________
+                    0             0             0             0
+
+
+           BETA
+              CL            TE            CL&1          TE&1
+              ________      ________      ________      ________
+ CL                 0             0             0             0
+ TE                 0             0             0             0
+ CL&1               0             0             0             0
+ TE&1               0             0             0             0
+
+
+           PSI
+              CL            TE            CL&1          TE&1
+              ________      ________      ________      ________
+ CL                 0
+ TE                 0             0
+ CL&1               0             0             0
+ TE&1               0             0             0             0
+
+
+     PARAMETER SPECIFICATION FOR BETWEEN
+
+
+           NU
+              RS            CL            TE            N
+              ________      ________      ________      ________
+                    0             0             0             0
+
+
+           LAMBDA
+              PHICL         BETACL        PHITE         BETATE        LOGVCL
+              ________      ________      ________      ________      ________
+ RS                 0             0             0             0             0
+ CL                 0             0             0             0             0
+ TE                 0             0             0             0             0
+ N                  0             0             0             0             0
+
+
+           LAMBDA
+              LOGVTE        RS            CL            TE            N
+              ________      ________      ________      ________      ________
+ RS                 0             0             0             0             0
+ CL                 0             0             0             0             0
+ TE                 0             0             0             0             0
+ N                  0             0             0             0             0
+
+
+           THETA
+              RS            CL            TE            N
+              ________      ________      ________      ________
+ RS                 0
+ CL                 0             0
+ TE                 0             0             0
+ N                  0             0             0             0
+
+
+           ALPHA
+              PHICL         BETACL        PHITE         BETATE        LOGVCL
+              ________      ________      ________      ________      ________
+                    1             2             3             4             5
+
+
+           ALPHA
+              LOGVTE        RS            CL            TE            N
+              ________      ________      ________      ________      ________
+                    6             7             8             9             0
+
+
+           BETA
+              PHICL         BETACL        PHITE         BETATE        LOGVCL
+              ________      ________      ________      ________      ________
+ PHICL              0             0             0             0             0
+ BETACL             0             0             0             0             0
+ PHITE              0             0             0             0             0
+ BETATE             0             0             0             0             0
+ LOGVCL             0             0             0             0             0
+ LOGVTE             0             0             0             0             0
+ RS                16            17            18            19            20
+ CL                 0             0             0             0             0
+ TE                 0             0             0             0             0
+ N                  0             0             0             0             0
+
+
+           BETA
+              LOGVTE        RS            CL            TE            N
+              ________      ________      ________      ________      ________
+ PHICL              0             0             0             0            10
+ BETACL             0             0             0             0            11
+ PHITE              0             0             0             0            12
+ BETATE             0             0             0             0            13
+ LOGVCL             0             0             0             0            14
+ LOGVTE             0             0             0             0            15
+ RS                21             0            22            23            24
+ CL                 0             0             0             0            25
+ TE                 0             0             0             0            26
+ N                  0             0             0             0             0
+
+
+           PSI
+              PHICL         BETACL        PHITE         BETATE        LOGVCL
+              ________      ________      ________      ________      ________
+ PHICL             27
+ BETACL             0            28
+ PHITE              0             0            29
+ BETATE             0             0             0            30
+ LOGVCL             0             0             0             0            31
+ LOGVTE             0             0             0             0             0
+ RS                 0             0             0             0             0
+ CL                 0             0             0             0             0
+ TE                 0             0             0             0             0
+ N                  0             0             0             0             0
+
+
+           PSI
+              LOGVTE        RS            CL            TE            N
+              ________      ________      ________      ________      ________
+ LOGVTE            32
+ RS                 0            33
+ CL                 0             0            34
+ TE                 0             0             0            35
+ N                  0             0             0             0             0
+
+
+     STARTING VALUES FOR WITHIN
+
+
+           NU
+              CL            TE            CL&1          TE&1
+              ________      ________      ________      ________
+                0.000         0.000         0.000         0.000
+
+
+           LAMBDA
+              CL            TE            CL&1          TE&1
+              ________      ________      ________      ________
+ CL             1.000         0.000         0.000         0.000
+ TE             0.000         1.000         0.000         0.000
+ CL&1           0.000         0.000         1.000         0.000
+ TE&1           0.000         0.000         0.000         1.000
+
+
+           THETA
+              CL            TE            CL&1          TE&1
+              ________      ________      ________      ________
+ CL             0.000
+ TE             0.000         0.000
+ CL&1           0.000         0.000         0.000
+ TE&1           0.000         0.000         0.000         0.000
+
+
+           ALPHA
+              CL            TE            CL&1          TE&1
+              ________      ________      ________      ________
+                0.000         0.000         0.000         0.000
+
+
+           BETA
+              CL            TE            CL&1          TE&1
+              ________      ________      ________      ________
+ CL             0.000         0.000         0.000         0.000
+ TE             0.000         0.000         0.000         0.000
+ CL&1           0.000         0.000         0.000         0.000
+ TE&1           0.000         0.000         0.000         0.000
+
+
+           PSI
+              CL            TE            CL&1          TE&1
+              ________      ________      ________      ________
+ CL             0.000
+ TE             0.000         0.000
+ CL&1           0.000         0.000         1.488
+ TE&1           0.000         0.000         0.000         1.157
+
+
+     STARTING VALUES FOR BETWEEN
+
+
+           NU
+              RS            CL            TE            N
+              ________      ________      ________      ________
+                0.000         0.000         0.000         0.000
+
+
+           LAMBDA
+              PHICL         BETACL        PHITE         BETATE        LOGVCL
+              ________      ________      ________      ________      ________
+ RS             0.000         0.000         0.000         0.000         0.000
+ CL             0.000         0.000         0.000         0.000         0.000
+ TE             0.000         0.000         0.000         0.000         0.000
+ N              0.000         0.000         0.000         0.000         0.000
+
+
+           LAMBDA
+              LOGVTE        RS            CL            TE            N
+              ________      ________      ________      ________      ________
+ RS             0.000         1.000         0.000         0.000         0.000
+ CL             0.000         0.000         1.000         0.000         0.000
+ TE             0.000         0.000         0.000         1.000         0.000
+ N              0.000         0.000         0.000         0.000         1.000
+
+
+           THETA
+              RS            CL            TE            N
+              ________      ________      ________      ________
+ RS             0.000
+ CL             0.000         0.000
+ TE             0.000         0.000         0.000
+ N              0.000         0.000         0.000         0.000
+
+
+           ALPHA
+              PHICL         BETACL        PHITE         BETATE        LOGVCL
+              ________      ________      ________      ________      ________
+                0.000         0.000         0.000         0.000         0.000
+
+
+           ALPHA
+              LOGVTE        RS            CL            TE            N
+              ________      ________      ________      ________      ________
+                0.000        29.899         5.182        14.915         0.000
+
+
+           BETA
+              PHICL         BETACL        PHITE         BETATE        LOGVCL
+              ________      ________      ________      ________      ________
+ PHICL          0.000         0.000         0.000         0.000         0.000
+ BETACL         0.000         0.000         0.000         0.000         0.000
+ PHITE          0.000         0.000         0.000         0.000         0.000
+ BETATE         0.000         0.000         0.000         0.000         0.000
+ LOGVCL         0.000         0.000         0.000         0.000         0.000
+ LOGVTE         0.000         0.000         0.000         0.000         0.000
+ RS             0.000         0.000         0.000         0.000         0.000
+ CL             0.000         0.000         0.000         0.000         0.000
+ TE             0.000         0.000         0.000         0.000         0.000
+ N              0.000         0.000         0.000         0.000         0.000
+
+
+           BETA
+              LOGVTE        RS            CL            TE            N
+              ________      ________      ________      ________      ________
+ PHICL          0.000         0.000         0.000         0.000         0.000
+ BETACL         0.000         0.000         0.000         0.000         0.000
+ PHITE          0.000         0.000         0.000         0.000         0.000
+ BETATE         0.000         0.000         0.000         0.000         0.000
+ LOGVCL         0.000         0.000         0.000         0.000         0.000
+ LOGVTE         0.000         0.000         0.000         0.000         0.000
+ RS             0.000         0.000         0.000         0.000         0.000
+ CL             0.000         0.000         0.000         0.000         0.000
+ TE             0.000         0.000         0.000         0.000         0.000
+ N              0.000         0.000         0.000         0.000         0.000
+
+
+           PSI
+              PHICL         BETACL        PHITE         BETATE        LOGVCL
+              ________      ________      ________      ________      ________
+ PHICL          1.000
+ BETACL         0.000         1.000
+ PHITE          0.000         0.000         1.000
+ BETATE         0.000         0.000         0.000         1.000
+ LOGVCL         0.000         0.000         0.000         0.000         1.000
+ LOGVTE         0.000         0.000         0.000         0.000         0.000
+ RS             0.000         0.000         0.000         0.000         0.000
+ CL             0.000         0.000         0.000         0.000         0.000
+ TE             0.000         0.000         0.000         0.000         0.000
+ N              0.000         0.000         0.000         0.000         0.000
+
+
+           PSI
+              LOGVTE        RS            CL            TE            N
+              ________      ________      ________      ________      ________
+ LOGVTE         1.000
+ RS             0.000         0.429
+ CL             0.000         0.000         1.488
+ TE             0.000         0.000         0.000         1.156
+ N              0.000         0.000         0.000         0.000        25.846
+
+
+
+     PRIORS FOR ALL PARAMETERS            PRIOR MEAN      PRIOR VARIANCE     PRIOR STD. DEV.
+
+     Parameter 1~N(0.000,infinity)           0.0000            infinity            infinity
+     Parameter 2~N(0.000,infinity)           0.0000            infinity            infinity
+     Parameter 3~N(0.000,infinity)           0.0000            infinity            infinity
+     Parameter 4~N(0.000,infinity)           0.0000            infinity            infinity
+     Parameter 5~N(0.000,infinity)           0.0000            infinity            infinity
+     Parameter 6~N(0.000,infinity)           0.0000            infinity            infinity
+     Parameter 7~N(0.000,infinity)           0.0000            infinity            infinity
+     Parameter 8~N(0.000,infinity)           0.0000            infinity            infinity
+     Parameter 9~N(0.000,infinity)           0.0000            infinity            infinity
+     Parameter 10~N(0.000,infinity)          0.0000            infinity            infinity
+     Parameter 11~N(0.000,infinity)          0.0000            infinity            infinity
+     Parameter 12~N(0.000,infinity)          0.0000            infinity            infinity
+     Parameter 13~N(0.000,infinity)          0.0000            infinity            infinity
+     Parameter 14~N(0.000,infinity)          0.0000            infinity            infinity
+     Parameter 15~N(0.000,infinity)          0.0000            infinity            infinity
+     Parameter 16~N(0.000,infinity)          0.0000            infinity            infinity
+     Parameter 17~N(0.000,infinity)          0.0000            infinity            infinity
+     Parameter 18~N(0.000,infinity)          0.0000            infinity            infinity
+     Parameter 19~N(0.000,infinity)          0.0000            infinity            infinity
+     Parameter 20~N(0.000,infinity)          0.0000            infinity            infinity
+     Parameter 21~N(0.000,infinity)          0.0000            infinity            infinity
+     Parameter 22~N(0.000,infinity)          0.0000            infinity            infinity
+     Parameter 23~N(0.000,infinity)          0.0000            infinity            infinity
+     Parameter 24~N(0.000,infinity)          0.0000            infinity            infinity
+     Parameter 25~N(0.000,infinity)          0.0000            infinity            infinity
+     Parameter 26~N(0.000,infinity)          0.0000            infinity            infinity
+     Parameter 27~IG(-1.000,0.000)         infinity            infinity            infinity
+     Parameter 28~IG(-1.000,0.000)         infinity            infinity            infinity
+     Parameter 29~IG(-1.000,0.000)         infinity            infinity            infinity
+     Parameter 30~IG(-1.000,0.000)         infinity            infinity            infinity
+     Parameter 31~IG(-1.000,0.000)         infinity            infinity            infinity
+     Parameter 32~IG(-1.000,0.000)         infinity            infinity            infinity
+     Parameter 33~IG(-1.000,0.000)         infinity            infinity            infinity
+     Parameter 34~IG(-1.000,0.000)         infinity            infinity            infinity
+     Parameter 35~IG(-1.000,0.000)         infinity            infinity            infinity
+
+
+<a name='tech8_output' class='heading'>TECHNICAL 8 OUTPUT</a>
+
+
+   TECHNICAL 8 OUTPUT FOR BAYES ESTIMATION
+
+     PROCESSOR    BSEED
+     1            0
+     2            285380
+     3            253358
+     4            93468
+
+                     POTENTIAL       PARAMETER WITH
+     ITERATION    SCALE REDUCTION      HIGHEST PSR
+     100              1.429               21
+     200              1.313               33
+     300              1.182               30
+     400              1.384               6
+     500              1.146               32
+     600              1.155               1
+     700              1.058               1
+     800              1.084               6
+     900              1.130               6
+     1000             1.156               6
+     1100             1.095               24
+     1200             1.067               24
+     1300             1.072               24
+     1400             1.101               24
+     1500             1.083               24
+     1600             1.083               24
+     1700             1.112               24
+     1800             1.111               24
+     1900             1.106               24
+     2000             1.092               24
+     2100             1.100               24
+     2200             1.110               24
+     2300             1.115               24
+     2400             1.106               24
+     2500             1.086               24
+     2600             1.094               24
+     2700             1.083               24
+     2800             1.072               24
+     2900             1.062               24
+     3000             1.041               24
+     3100             1.040               24
+     3200             1.052               18
+     3300             1.075               18
+     3400             1.078               18
+     3500             1.072               18
+     3600             1.065               18
+     3700             1.061               18
+     3800             1.052               18
+     3900             1.054               18
+     4000             1.051               18
+     4100             1.051               18
+     4200             1.047               18
+     4300             1.044               18
+     4400             1.043               18
+     4500             1.041               18
+     4600             1.041               18
+     4700             1.045               18
+     4800             1.049               18
+     4900             1.046               18
+     5000             1.046               18
+
+
+<a name='summary_plausible' class='heading'>SUMMARIES OF PLAUSIBLE VALUES (N = NUMBER OF OBSERVATIONS * NUMBER OF IMPUTATIONS)</a>
+
+
+     SAMPLE STATISTICS
+
+
+           Means
+              PHICL         BETACL        PHITE         BETATE        LOGVCL
+              ________      ________      ________      ________      ________
+                0.182        -0.314         0.098        -0.094         0.028
+
+
+           Means
+              LOGVTE        B_CL          B_TE
+              ________      ________      ________
+               -0.034         5.183        14.909
+
+
+           Covariances
+              PHICL         BETACL        PHITE         BETATE        LOGVCL
+              ________      ________      ________      ________      ________
+ PHICL          0.018
+ BETACL         0.015         0.033
+ PHITE          0.009         0.013         0.026
+ BETATE         0.004         0.005         0.003         0.008
+ LOGVCL         0.005         0.005         0.005         0.002         0.109
+ LOGVTE        -0.002        -0.004        -0.002        -0.001        -0.001
+ B_CL          -0.076        -0.107        -0.064        -0.027        -0.019
+ B_TE           0.043         0.082         0.042         0.020         0.040
+
+
+           Covariances
+              LOGVTE        B_CL          B_TE
+              ________      ________      ________
+ LOGVTE         0.023
+ B_CL          -0.001         1.668
+ B_TE          -0.013        -0.745         1.247
+
+
+           Correlations
+              PHICL         BETACL        PHITE         BETATE        LOGVCL
+              ________      ________      ________      ________      ________
+ PHICL          1.000
+ BETACL         0.615         1.000
+ PHITE          0.430         0.440         1.000
+ BETATE         0.321         0.316         0.228         1.000
+ LOGVCL         0.125         0.078         0.093         0.068         1.000
+ LOGVTE        -0.092        -0.127        -0.088        -0.044        -0.014
+ B_CL          -0.441        -0.458        -0.303        -0.227        -0.044
+ B_TE           0.288         0.406         0.231         0.199         0.108
+
+
+           Correlations
+              LOGVTE        B_CL          B_TE
+              ________      ________      ________
+ LOGVTE         1.000
+ B_CL          -0.003         1.000
+ B_TE          -0.078        -0.517         1.000
+
+
+<a name='summary_plausible_stdev' class='heading'>SUMMARY OF PLAUSIBLE STANDARD DEVIATION (N = NUMBER OF OBSERVATIONS)</a>
+
+
+     SAMPLE STATISTICS
+
+
+           Means
+              PHICL_SD      BETACL_S      PHITE_SD      BETATE_S      LOGVCL_S
+              ________      ________      ________      ________      ________
+                0.077         0.085         0.111         0.075         0.167
+
+
+           Means
+              LOGVTE_S      B_CL_SD       B_TE_SD
+              ________      ________      ________
+                0.119         0.178         0.153
+
+
+           Covariances
+              PHICL_SD      BETACL_S      PHITE_SD      BETATE_S      LOGVCL_S
+              ________      ________      ________      ________      ________
+ PHICL_SD       0.000
+ BETACL_S       0.000         0.000
+ PHITE_SD       0.000         0.000         0.000
+ BETATE_S       0.000         0.000         0.000         0.000
+ LOGVCL_S       0.000         0.000         0.000         0.000         0.001
+ LOGVTE_S       0.000         0.000         0.000         0.000         0.000
+ B_CL_SD        0.000         0.000         0.000         0.000         0.000
+ B_TE_SD        0.000         0.000         0.000         0.000         0.000
+
+
+           Covariances
+              LOGVTE_S      B_CL_SD       B_TE_SD
+              ________      ________      ________
+ LOGVTE_S       0.000
+ B_CL_SD        0.000         0.001
+ B_TE_SD        0.000         0.000         0.000
+
+
+           Correlations
+              PHICL_SD      BETACL_S      PHITE_SD      BETATE_S      LOGVCL_S
+              ________      ________      ________      ________      ________
+ PHICL_SD       1.000
+ BETACL_S       0.133         1.000
+ PHITE_SD       0.050         0.001         1.000
+ BETATE_S       0.135        -0.103         0.148         1.000
+ LOGVCL_S       0.032        -0.070         0.055         0.169         1.000
+ LOGVTE_S       0.044         0.061         0.077         0.064         0.075
+ B_CL_SD       -0.035         0.384         0.014        -0.257        -0.119
+ B_TE_SD        0.010        -0.005         0.105        -0.038        -0.027
+
+
+           Correlations
+              LOGVTE_S      B_CL_SD       B_TE_SD
+              ________      ________      ________
+ LOGVTE_S       1.000
+ B_CL_SD       -0.072         1.000
+ B_TE_SD        0.052         0.382         1.000
+
+
+<a name='plot_info' class='heading'>PLOT INFORMATION</a>
+
+The following plots are available:
+
+  <a href='#viewplot:1'>Histograms (sample values, estimated factor scores)</a>
+  <a href='#viewplot:2'>Scatterplots (sample values, estimated factor scores)</a>
+  <a href='#viewplot:3'>Between-level histograms (sample values, sample/estimated means/variances, estimated factor scores)</a>
+  <a href='#viewplot:4'>Between-level scatterplots (sample values, sample/estimated means/variances, estimated factor scores)</a>
+  <a href='#viewplot:5'>Two-level cluster-specific observed and estimated values plots</a>
+  <a href='#viewplot:6'>Time series plots (sample values, ACF, PACF, estimated factor scores)</a>
+  <a href='#viewplot:7'>Histogram of subjects per time point</a>
+  <a href='#viewplot:8'>Time interval plots</a>
+  <a href='#viewplot:9'>Bayesian posterior parameter distributions</a>
+  <a href='#viewplot:10'>Bayesian posterior parameter trace plots</a>
+  <a href='#viewplot:11'>Bayesian autocorrelation plots</a>
+  <a href='#viewplot:12'>Latent variable distribution plots</a>
+
+DIAGRAM INFORMATION
+
+  Mplus diagrams are currently not available for multilevel analysis.
+  No diagram output was produced.
+
+
+     Beginning Time:  10:27:25
+        Ending Time:  10:31:01
+       Elapsed Time:  00:03:36
+
+
+
+MUTHEN & MUTHEN
+3463 Stoner Ave.
+Los Angeles, CA  90066
+
+Tel: (310) 391-9971
+Fax: (310) 391-8971
+Web: www.StatModel.com
+Support: Support@StatModel.com
+
+Copyright (c) 1998-2022 Muthen & Muthen
+</pre>
+</body>
+</html>

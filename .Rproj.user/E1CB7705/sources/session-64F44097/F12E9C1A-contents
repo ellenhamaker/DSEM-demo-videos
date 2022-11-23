@@ -1,0 +1,45 @@
+
+# 3 days
+
+d <- 3
+N <- 250
+
+# Base rate and developmental costs
+# A basic rate of 50 dollar per participant
+
+CS.dev <- d*1000
+CS.base <- d*1500
+CS <- matrix(,N,1)
+
+for (i in 1:N)
+{ CS[i] <- CS.dev + CS.base + 50*i*d}
+
+
+# Assuming an average of 470 dollar per participant
+# based on 559 for professionals, 429 for students
+# Note, there is also a group pricing option 
+QF <- matrix(,N,1)
+
+QF.ave <- 470
+QF.base <- 4000
+QF.mp <- round(QF.base/QF.ave)
+
+QF[1:QF.mp,1] <- QF.base
+
+for (i in (QF.mp+1):N)
+{ QF[i,1] <- QF.base + i*0.75*QF.ave}
+
+# Assuming 320 US dollar on average per participant
+# based on 400 for professionals, 265 for students
+
+IS.ave <- 310
+IS <- matrix(,N,1)
+
+for (i in 1:N)
+{ IS[i,1] <- 0.5*i*IS.ave}
+
+mv <- max(QF,CS,IS)
+
+plot(CS, ylim = c(0,mv), type="l", col="red", lwd=2)
+lines(QF, col="blue", lwd=2) 
+lines(IS, col="orange", lwd=2)

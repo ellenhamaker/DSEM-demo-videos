@@ -1,0 +1,559 @@
+---
+title: "Social behaviour dynamics: Week 6"
+author: "Ellen Hamaker"
+date: "ADS, 2021-2022"
+mainfont: Arial
+fontsize: 12pt
+urlcolor: blue
+output:
+  html_document:
+    highlight: default
+    theme: paper
+    toc: yes
+    toc_float: yes
+  pdf_document:
+    latex_engine: xelatex
+    toc: yes
+    toc_depth: '5'
+params:
+  answers: true
+  rcode: true
+---
+# 1. Readings 
+
+Hamaker, E. L., Kuiper, R., and Grasman, R. P. P. P. (2015). A critique of the cross-lagged panel model. Psychological Methods, 20(1), 102–116. https://doi.org/10.1037/a0038889. 
+
+__Skip the section "Relatedness to othe existing SEM approaches" (p.106-108)__
+
+Reading questions to HK&G:
+
+1) Consider a concept such as happiness, motivation, or academic performance, which can be measured repeatedly over time. What are the two types of stability that should be distinguished for such a concept?
+
+2) What is the main critique of HK&G on the traditional CLPM? 
+
+$~$
+
+Hamaker, E. L., Asparouhov, T., Brose, A., Schmiedek, F., and Muthén, B. (2018):
+At the frontiers of modeling intensive longitudinal data: Dynamic structural equation models
+for the affective measurements from the COGITO study. Multivariate Behavioral Research, 53(6), 820-841.https://doi.org/10.1080/00273171.2018.1446819
+
+__You can skip this paper entirely; if you have time and energy left, you can just read the intro and section 1.__
+
+
+$~$ 
+
+# 2. R: Within and between
+In this exercise, we are going to see how trait-like, stable differences between individuals and state-like, temporary fluctuations within individuals contribute to our observed data. Specifically, we will create cross-sectional data (i.e., data from many individuals at a single measurement occasion), that are affected by trait-like and state-like components. This will help us to see how a cross-sectional correlation between two variables is actually a function of the correlation between the time-invariant traits, and the correlation between the temporal states.
+
+It may be helpful to think of a running example here: For instance, you can think of X being a measure of a person's _happiness_, and Y being a measure of their _gratitude_. Both these constructs are characterized by trait-like stable differences between people (e.g., some individuals are more happy than others on average), but also by temporal, state-like fluctuations within people over time (e.g., on some days you score higher than your own average than on other days). When we have a cross-sectional measurements (meaning: we have measured people only at one occasion), we cannot distinguish betweent these two sources. Yet, they both contribute to the variability (and thus the structure) of the data, as we will see below.
+
+## 2.0 Installing relevant packages
+If you haven't already, install the following package:
+
+```{r blokje0, echo=T, eval=T, message=F}
+# install.packages("mvtnorm")
+```
+
+## 2.1 Equal trait and state variances
+We will begin with a scenario in which the trait variances and the state variances are equal, meaning that the trait and state components equally contribute to our observations. (Note that for now it is actually arbitrary which source we call trait and which one we call state, but this becomes meaningful when we have multiple waves, as we do in Exercise 3: Then, the state comonents change over time, while the trait components does not.)
+
+$\blacktriangleright$ First, create the two stable, trait components for 1000 people. Let both components have a variance of 1 and set their covariance to 0.8. Set the mean to 10 for the first variable and 20 for the second. 
+
+For this you can use the function rmvnorm() from the package mvtnorm. 
+
+```{r blokje1, echo=T, eval=T, message=F, include=params$rcode}
+library(mvtnorm)
+set.seed(5810)
+N <- 10000
+mB <- c(10,20)
+SigmaB <- matrix(c(1,0.8,0.8,1),2,2)
+datB <- rmvnorm(N, mB, SigmaB)
+datB[1:10,]
+```
+
+$\blacktriangleright$ What is the correlation?
+
+```{r blokje1b, echo=T, eval=T, message=F, include=params$rcode}
+# Covariance matrix:
+cov(datB)
+
+# Correlation matrix:
+cor(datB)
+```
+
+```{r blokje1bb, echo=T, eval=T, message=F, include=params$answers}
+# Note that since we simulated the data with a variance of 1
+# for each variable, the covariance is also the correlation
+# (as correlation is equal to the covariance divided by the 
+# product of the standard deviations). Hence, for the sample 
+# we created, the covariance and the correlation should both
+# be close to 0.8.
+```
+
+$\blacktriangleright$ Create a scatter plot of these data.
+```{r blokje1c, echo=T, eval=T, message=F, include=params$rcode}
+plot(datB)
+```
+
+
+$\blacktriangleright$ Next, create the two transient, state components for these 1000 people. Let both components have a variance of 1 and set the covariance to 0.2. Set the means to 0. 
+
+```{r blokje2, echo=T, eval=T, message=F, include=params$rcode}
+mW <- c(0,0)
+SigmaW <- matrix(c(1,0.2,0.2,1),2,2)
+datW <- rmvnorm(N, mW, SigmaW)
+datW[1:10,]
+cov(datW)
+cor(datW)
+```
+
+$\blacktriangleright$ What is the correlation here? 
+```{r blokje2b, echo=T, eval=T, message=F, include=params$rcode}
+# Covariance matrix:
+cov(datW)
+
+# Correlation matrix:
+cor(datW)
+```
+
+```{r blokje2bb, echo=T, eval=T, message=F, include=params$answers}
+# Again, since the variances are both 1, the covariance
+# is the same as the correlation. Hence, for the sample,
+# both should be close to 0.2
+```
+
+
+$\blacktriangleright$ Create a scatter plot of these data.
+```{r blokje2c, echo=T, eval=T, message=F, include=params$answers}
+plot(datW)
+```
+
+
+
+Now that you have the stable part and the transient part, you can add the two together to get cross-sectional data. These cross-sectional data are thus partly determined by trait-like differences between individuals, and partly by state-like differences. This could be visualized with the path diagram in Figure 1. 
+
+![_Fig.1: Cross-sectional data: Equal contributions of trait and state components_](CrossWithinBetween.jpg){width=75%}
+
+$\blacktriangleright$  Create these cross-sectional data. What is the cross-sectional correlation?
+
+```{r blokje3a, echo=T, eval=T, message=F, include=params$rcode}
+datC <- datB + datW
+cor(datC)
+# This shows that the correlation is close to 0.5.
+```
+
+```{r blokje3aa, echo=T, eval=T, message=F, include=params$answers}
+# This shows that the correlation is close to 0.5.
+```
+
+$\blacktriangleright$ How does it relate to the covariances used to generate the data? 
+
+```{r blokje3b, echo=T, eval=T, message=F, include=params$answers}
+
+# The variances of the trait and state components are all equal, and 
+# hence they also contribute equally to the variance of the two 
+# components combined. Since the relative contributions of the trait 
+# components and the state components to the cross-sectional variance 
+# is identical, the cross-sectional data are equally determined by 
+# each of them, and the cross-sectional correlation lies in between
+# the trait correlation of 0.8 and the state correlation of 0.2: 
+# Hence, it is (about) 0.5. 
+# This is further explored below.
+```
+
+$\blacktriangleright$ Create a scatter plot of these cross-sectional data.
+```{r blokje3c, echo=T, eval=T, message=F, include=params$rcode}
+plot(datC)
+```
+
+Now, let us look at the cross-sectional correlation in more detail. The cross-sectional correlation between variables X and Y can be expressed as a function of the cross-sectional covariance and the cross-sectional variances of X and Y, that is,
+
+$$cor(X,Y)=\frac{cov(X,Y)}{\sqrt{var(X)var(Y)}}$$.
+
+Hence, the question is: How can we relate the cross-sectional covariance and variances of X and Y to the covariances and variances of the trait-components $X_B$ and $Y_B$, and the covariances and variances of the state-componente $X_W$ and $Y_W$.
+
+
+$\blacktriangleright$ First, note that we have $X=X_B + X_w$, where $X_B \perp \!\!\! \perp X_W$. Can you say what this means in words?
+
+```{r blokje3d, echo=T, eval=T, message=F, include=params$answers}
+# The cross-sectional variable X is a sum of the trait variable X_B
+# and the state variable X_W; moreover, these two contributions are
+# independent of each other. 
+# Note that this is als particularly clear from how you simulated 
+# the data above: You randomly drew the trait components X_B and 
+# Y_B from one multivariate distribution, and the state components
+# X_W and Y_W from another; then you added the two to get the 
+# cross-sectional data.
+
+```
+
+Since $X$ is the sum of two indepedent components (i.e., $X_B$ and $X_W$), its variance is simply the sum of the variances of these two components, that is $var(X) = var(X_B) + var(X_W)$. The same is true for the variance of Y, that is $var(Y) = var(Y_B) + var(Y_W)$.
+
+Moreover, since we also have have $X_B \perp \!\!\! \perp Y_W$ and $Y_B \perp \!\!\! \perp X_W$, the cross-sectional covariance between $X$ and $Y$ can be expressed as the sum of the covariance between the trait components and the covariance between the state components, that is, $cov(X,Y) = cov(X_B,Y_B) + cov(X_W,Y_W)$. 
+
+So now we have the cross-sectional variances and covariance of X and Y expressed as functions of the trait variances and covariance of $X_B$ and $Y_B$, and the state variances and covariance of $X_W$ and $Y_W$. 
+
+$\blacktriangleright$ Use these expressions and the values we used in the simulation to calculate what the value of the cross-sectional correlation should be here. Compare your result to the correlation you found for the simulated cross-sectional data.
+
+```{r blokje3e, echo=T, eval=T, message=F, include=params$answers}
+# cor(X,Y) = cov(X,Y)/sqrt{var(X)var(Y)}
+# cov(X,Y) = 0.8 + 0.2 = 1
+# var(X) = 1 + 1 = 2
+# var(Y) = 1 + 1 = 2
+# cor(X,Y) = 1/(sqrt(2+2)) = 1/2 = 0.5
+# This is indeed the correlation obtained for the simulated data.
+```
+
+
+
+## 2.2 More state than trait variance
+Above, the relative contributions of the trait and state components to the observed datta were equal. The cross-sectional correlation fell exactly in between the trait correlation and the state correlation. 
+
+Now we will create a scenario in which the contribution of the state components to the cross-sectional variance is much larger than that of the trait components (e.g., by changing our questions to "how happy are you _right now_?", and "how grateful are you _right now_?"). We will see how this changes the cross-sectional data, in particular, the cross-sectional correlation. To do so, we will use the same components that we generated above, but change their relative contributions, making that of the state components twice as large. This could be represented as the path diagram in Figure 2.
+
+![_Fig.2: Cross-sectional data: State contribution twice as large as trait contribution_](CrossWithinBetween2.jpg){width=75%}
+
+$\blacktriangleright$ Create a new cross-sectional dataset, where the contribution of the transient, state components is 2 times larger than that of the stable, trait-like components. 
+
+```{r blokje4, echo=T, eval=T, message=F, include=params$rcode}
+datC <- datB + 2*datW
+```
+
+$\blacktriangleright$ Based on the analytical expressions for the cross-sectional correlation presented above, what do you expect the cross-sectional correlation to be now? 
+
+```{r blokje4b, echo=T, eval=T, message=F, include=params$answers}
+# cor(X,Y) = cov(X,Y)/sqrt{var(X)var(Y)}
+# The cross-sectional variance of X is now: var(X) = 1 + 4 = 5
+# The cross-sectional variance of Y is now: var(Y) = 1 + 4 = 5
+# The cross-sectional covariance between X and Y is now: 
+# cov(X,Y) = 0.8 + 4*0.2 = 1.6
+# Hence, the cross-sectional correlation is:
+# cor(X,Y) = 1.6/(sqrt(5*5)) = 1.6/sqrt(25) = 0.32
+```
+
+
+$\blacktriangleright$ Compare this theoretical result with the empirical results (i.e., is the correlation from the simulated data close to what you computed it should be?). 
+
+```{r blokje5a, echo=T, eval=T, message=F, include=params$answers}
+cov(datC)
+# Variances are diagonal elements: They are about 5
+# as the variance of the stable part is 1, and the 
+# variances of the transient parts are 2*2=4.
+# Covariance is the off-diagonal element: it is about
+# 1.6, as we calculated above.
+
+cor(datC)
+# This shows that the correlation is indeed close to 0.32.
+# Deviations are due to sampling.
+```
+
+## 2.3 The same cross-sectional correlation 
+We just generated cross-sectional data with a correlation of about 0.32, based on trait components with a correlation of 0.8 and state components with a correlation of 0.2. Now we will generate cross-sectional data with again a correlation of 0.32, but based on different trait and state correlations.
+
+$\blacktriangleright$ To do this, start by creating trait components with a correlation of 0.4 and state components with a correlation of 0.15. Use the same means as above. 
+
+
+```{r blokje6, echo=T, eval=T, message=F, include=params$rcode}
+set.seed(782)
+mB <- c(10,20)
+CorB <- matrix(c(1,0.4,0.4,1),2,2)
+datB <- rmvnorm(N, mB, CorB)
+CorW <- matrix(c(1,0.15,0.15,1),2,2)
+datW <- rmvnorm(N,c(0,0),CorW)
+```
+
+$\blacktriangleright$ Next, add the components, giving all the components equal weights (i.e., as in exercise 2.1). What cross-sectional correlation do you obtain? 
+```{r blokje6b, echo=T, eval=T, message=F, include=params$rcode}
+datC <- datB + datW
+cor(datC)
+```
+
+```{r blokje6bb, echo=T, eval=T, message=F, include=params$answers}
+# This shows that when the relative contributions are equal,
+# the cross-sectional correlation is (about) 0.275, as 
+# that is the average of the trait correlation of 0.4 and 
+# the state correlation of 0.15 (i.e., (0.4+0.15)/2=0.275).
+# (Note, small deviations from 0.275 are due to sampling 
+# error; the larger the sample, the smaller the deviation
+# tends to be.)
+```
+
+$\blacktriangleright$ In order to obtain a cross-sectional correlation that is 0.32, should you increase or decrease the weight of the state component? Try out different weights for the state component, until you find a weight for which you obtain a cross-sectional correlation of approximately 0.32. 
+
+```{r blokje6c, echo=T, eval=T, message=F, include=params$answers}
+# When the weights are equal, the correlation is 0.275; hence, to
+# get a correlation of 0.32, the part with the smaller correlation 
+# (that is the state components) should be weighted less heavily
+# than the part with the larger correlation.
+```
+
+```{r blokje6cc, echo=T, eval=T, message=F, include=params$rcode}
+# Hence, we try out weights between 0.1 and 0.9 for the state part:
+p <- c(0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9)
+res <- matrix(NA,9,1)
+for  (k in 1:9)
+  {datC <- datB + p[k]*datW
+  res[k,1] <- cor(datC)[2,1]
+}
+round(cbind(p,res),2)
+```
+
+## 2.4 Conclusion
+Of course, in reality, we cannot decide what the relative contribution is of the trait and state components. But this exercise illustrates that when you have cross-sectional data, and you find a certain correlation, it is impossible to tell to what extent this represents a trait-like correlation or a state-like correlation. Basically, there are three unknowns, that is, the actual trait correlation, the state correlation, and the relative contributions of the trait and state components to the cross-sectional data. As a result, a cross-sectional correlation can be the result of infinitely many different combinations of trait and state data. 
+
+You can get more insight by checking out this shiny app that Noémi Schuurman created: https://noemikschuurman.shinyapps.io/withinbetweenapp/. In the app you can change the correlation of the traits (between) and states (within) for the variables Y and X. Further, you can change either the standard deviation of the traits and state parts of Y and X (toggle on 'Std. Dev.' at the top of the app), or the intra-class correlation of Y and X (toggle on 'ICC' at the top of the app). This ICC is the proportion of trait (between) variance in the cross-sectional variance. 
+
+To conclude, if we want to be able to distinguish between trait and state contributions, and the correlations associated with them, we need longitudinal data, in which the same people were measured multiple times on the same variables: Then we can determine to what extent their scores remain stable over time, and to what extent they vary, and we can investigate how X and Y correlate within people over time, and how they correlate between people.
+
+# 3. RI-CLPM
+You will begin with creating panel data according to a RI-CLPM, and then analyze these data with a traditional CLPM and some alternative models. The data will be bivariate, obtained from 1000 cases at 4 waves.
+
+## 3.1 Load packages
+To do structural equation modeling in R, we make use of the package lavaan. If you haven't already, make sure to install it.
+
+```{r blokje0b, echo=T, eval=T, message=F}
+# install.packages('lavaan', dependencies = T)
+```
+
+## 3.1 Simulate the data
+
+$\blacktriangleright$ First, create the random intercepts. Let both intercepts have a variance of 1 and set the covariance to 0.2. For this you can use the function rmnorm() from the package mvtnorm.
+
+```{r blokje1a, echo=T, eval=T, message=F, include=params$rcode}
+library(mvtnorm)
+set.seed(2481)
+N <- 1000
+mB <- c(0,0)
+SigmaB <- matrix(c(1,0.2,0.2,1),2,2)
+RI <- rmvnorm(N, mB, SigmaB)
+RI[1:5,]
+```
+
+$\blacktriangleright$ Next, we makke the within-person components at each wave (i.e., measurement occasion) and add the random intercepts to it. (Please note: You do __NOT__ have to study and fully understand the code here; it is only inlcuded here for the sake of completeness, and you can skip it if you want.)
+
+```{r blokje2a, echo=T, eval=T, message=F}
+NW <- 4   # number of time points
+phi.X <- 0.3  # autoregressive parameter for X
+phi.Y <- 0.2  # autoregressive parameter for Y
+beta.X <- 0.15 # cross-lagged parameter from Y to X
+beta.Y <- 0.0   # cross-lagged parameter from X to Y
+
+P <- matrix(c(phi.X,beta.Y,beta.X,phi.Y),2,2)
+
+W <- matrix(,N,2*NW)
+mW <- c(0,0)
+SigmaW <- matrix(c(1,0.5,0.5,1),2,2)
+
+# Residual covariance matrix (such that the series
+# are stationary)
+Psi <- matrix((diag(1,4) - P%x%P) %*% c(SigmaW),2,2)
+
+# Generate within data for wave 1
+dat.W <- rmvnorm(N, mW, SigmaW)
+
+# Compute total data for wave 1 (sum of 
+# random intercepts and within components)
+dat.Tot <- RI + dat.W
+
+# Generate within data and total data for waves 2 to NW
+dat.lag1 <- dat.W
+dat.lag0 <- matrix(NA,N,2)
+for (t in 2:NW) {
+  for (i in 1:N) {
+    dat.lag0[i,] <- c(P%*%dat.lag1[i,]) + rmvnorm(1,c(0,0),Psi)
+  }
+  dat.W <- cbind(dat.W,dat.lag0)  # Within data
+  dat.Tot <- cbind(dat.Tot,(dat.lag0+RI))  # Total data (within + between)
+  dat.lag1 <- dat.lag0 # Prepare for next wave
+}
+# Although we are not able to observe the within part in reality
+# it is helpful to check what covariance matrix we have for that
+# part in our simulations
+round(cov(dat.W),2)
+# What we have observed is the total data, which consists of 
+# both the within components but also the random intercepts 
+# (between components).
+colnames(dat.Tot) <- c("x1", "y1", "x2", "y2", "x3", "y3", "x4", "y4")
+round(cov(dat.Tot),2)
+```
+
+## 3.2 Estimate the CLPM
+Here is the code for lavaan that we use to estimate the traditional CLPM. What you should note from this, is that we regress each observation from wave 2 onward on the observations at the preceding occasion (e.g., x2 ~ x1 + y1). You can ignore the rest of the code (for more information on Lavaan and the Lavaan model syntax, you can look at the first few chapters of their tutorial: https://lavaan.ugent.be/tutorial/tutorial.pdf; note this is __NOT__ part of this course though). 
+
+```{r blokje3, echo=T, eval=T, message=F}
+library(lavaan)
+CLPM <- '
+# Estimate the lagged effects between the observed variables.
+  x2 ~ x1 + y1
+  x3 ~ x2 + y2
+  x4 ~ x3 + y3
+
+  y2 ~ x1 + y1
+  y3 ~ x2 + y2
+  y4 ~ x3 + y3
+
+  # Estimate the covariance between the observed variables at the first wave. 
+  x1 ~~ y1 # Covariance
+  
+  # Estimate the covariances between the residuals of the observed variables.
+  x2 ~~ y2
+  x3 ~~ y3
+  x4 ~~ y4
+
+  # Estimate the (residual) variance of the observed variables.
+  x1 ~~ x1 # Variances
+  y1 ~~ y1 
+  x2 ~~ x2 # Residual variances
+  y2 ~~ y2 
+  x3 ~~ x3 
+  y3 ~~ y3 
+  x4 ~~ x4 
+  y4 ~~ y4 
+'
+```
+
+$\blacktriangleright$ Estimate the CLPM using the following code.
+```{r blokje4e, echo=T, eval=T, message=F}
+CLPM.fit <- lavaan(CLPM, data = dat.Tot, missing = 'ML', meanstructure = T, int.ov.free = T) 
+summary(CLPM.fit, standardized = T)
+```
+
+$\blacktriangleright$ Check the lagged parameter estimates (i.e., the regression coefficients). What conclusion can you draw?  
+
+```{r blokje11, echo=T, eval=T, message=F, include=params$answers}
+# The autoregressive parameters (e.g. X2 regressed on X1 or Y4 
+# rergessed on Y3) are quite large; they are all positive and significant,
+# meaning that positive deviations from the grand mean are tended to be 
+# followed by positve deviations, and vice versa.  
+# Regarding the cross-lagged parameters, we see that teh effects from Y to
+# X are not significantly different from zero, but the effects from X to 
+# Y are significant: 
+# Y2 regressed on X1: -0.081 (SE=0.027, p=0.003)
+# Y3 regressed on X2: -0.097 (SE=0.027, p<0.001)
+# Y4 regressed on X3: -0.076 (SE=0.026. p=0.003)
+# Hence, all these cross-lagged paths are negative, meaning that higher X
+# is followed by lower Y scores, and lower X is followed by a higher Y score.
+
+```
+
+
+## 3.3 Estimate RI-CLPM
+The traditional CLPM does not fit the data very well; this can be seen by the significant chi-square test (chi-square = 382.399, df = 12, p <0.0001; note, we are not discussing this in further detail in this course.)
+
+Instead of trying to improve model fit of the traditional CLPM by adding higher order lagged relations (like people used to do), we can use a RI-CLPM that accounts for trait-like stability through the inclusion of two random intercepts, and that models the dynamics over time using the within-person components. Check the code for this model below.
+
+```{r blokje7b, echo=T, eval=T, message=F}
+RICLPM <- '
+  # Create between components (random intercepts)
+  RIx =~ 1*x1 + 1*x2 + 1*x3 + 1*x4 
+  RIy =~ 1*y1 + 1*y2 + 1*y3 + 1*y4 
+  
+  # Create within-person components
+  wx1 =~ 1*x1
+  wx2 =~ 1*x2
+  wx3 =~ 1*x3 
+  wx4 =~ 1*x4
+
+  wy1 =~ 1*y1
+  wy2 =~ 1*y2
+  wy3 =~ 1*y3
+  wy4 =~ 1*y4
+
+  # Estimate the lagged effects between the within-person centered variables.
+  wx2 ~ wx1 + wy1
+  wx3 ~ wx2 + wy2
+  wx4 ~ wx3 + wy3
+
+  wy2 ~ wx1 + wy1
+  wy3 ~ wx2 + wy2
+  wy4 ~ wx3 + wy3
+
+  # Estimate the covariance between the within-person
+  # centered variables at the first wave. 
+  wx1 ~~ wy1 # Covariance
+  
+  # Estimate the covariances between the residuals of the
+  # within-person centered variables (the innovations).
+  wx2 ~~ wy2
+  wx3 ~~ wy3
+  wx4 ~~ wy4
+
+  # Estimate the variances and covariance of the random intercepts. 
+  RIx ~~ RIx  # variance
+  RIy ~~ RIy  # variance
+  RIx ~~ RIy  # covariance
+
+  # Estimate the (residual) variance of the 
+  # within-person centered variables.
+  wx1 ~~ wx1 # variance
+  wy1 ~~ wy1 # variance
+
+  wx2 ~~ wx2 # residual variance
+  wy2 ~~ wy2 # residual variance
+  wx3 ~~ wx3 # residual variance
+  wy3 ~~ wy3 # residual variance
+  wx4 ~~ wx4 # residual variance
+  wy4 ~~ wy4 # residual variances
+'
+RICLPM.fit <- lavaan(RICLPM, data = dat.Tot, missing = 'ML', meanstructure = T, int.ov.free = T) 
+summary(RICLPM.fit, standardized = T)
+```
+
+$\blacktriangleright$ What conclusion can you draw?  
+
+```{r blokje11c, echo=T, eval=T, message=F, include=params$answers}
+# At the within-person level, Y seems to have an effect on X
+# one occasion later, whereas X does not have an effect on Y over time
+# Moreover, the effect from Y to X is positive:
+# wx2 regressed on wy1: 0.190 (SE=0.053, p<0.0001)
+# wx3 regressed on wy2: 0.165 (SE=0.048, p=0.001)
+# wx4 regressed on wy3: 0.200 (SE=0.047, p<0.0001)
+# Note that we simulated the data with a cross-lagged parameter from
+# Y to X of 0.15 at each wave; hence, these estimates are not too far off.
+```
+
+
+## 3.4 Interpretation
+Suppose that the variable X is social media use, and Y is happiness, and these consist of measurements taken every 3 months. 
+
+$\blacktriangleright$ What conclusions would you have drawn based on the traditional CLPM?
+
+```{r blokje12a, echo=T, eval=T, message=F, include=params$answers}
+# Based on the lagged regression coefficients, we would conclude
+# that current social media use (X) is not affected by prior happiness (Y); 
+# however, current happiness (Y) is affected by prior social media use (X),
+# and this is a negative effect; this means that more social media use is 
+# followed by decreased happiness.
+# This could easily lead to the conclusion that social media use is
+# not good for your happiness. 
+```
+
+$\blacktriangleright$ What conclusions would you have drawn based on the RI-CLPM?
+```{r blokje12c, echo=T, eval=T, message=F, include=params$answers}
+# Based on the lagged regression coefficients, we would conclude
+# that current social media use (X) is positively affected by prior
+# happiness (Y), whereas current happiness (Y) is not affected by 
+# prior social media use.
+# This could easily lead to the conclusion that social media use is not
+# affecting your happiness, and hence there is no reason to increase
+# or decrease it if you want to increase you happiness. 
+```
+
+
+## 3.5 Conclusion
+The analyses above have shown that the substantive conclusions you draw about the influence two variable have on each other over time, can be very different when using a different model. This is particularly troubling if we want to formualte some form of advice (for instance: whether or not to stay away from social media). 
+
+Which model we should believe or trust when our interest is in causal relations, is not set in stone. We may look at model fit, but of course we may also heavily lean on theory and on how reasonable a model seems to be in a particualr substantive context. Moreover, as George Box already point out in 1978: "All models are wrong but some are useful".
+
+When thinking of the social media and happiness example, tehre are numerous shortcomings one could point out, for instance:
+
+* The intervals between the observations are quite large: 3 months. We may see very different results when we do a daily diary study, to determine whether social media use is followed by more or less happiness in the moment. When thinking about the target trial (e.g., the hypothetical rnadomized controlled trial we would do if it were possible) forces us also to think more explicitly about the timing of the intervention and the outcome.
+
+* The approach is based on estimating one effect; we can think of this as an estimate of the average causal effect (ACE). In reality, the causal effects may differ across people. Using a multilevel model with random slopes would allow us to investigate individual differences in teh causal effects. Alternatively, we could consider adding interactions to our model to account for individual differences in slopes.
+
+* We have not considered any time-varying covariates that could be confounders of social media use and happiness at the within-person level. Examples of this could be stress (more stress could cause more social media use and less happiness), the weather (nice weather may increase happniess and reduce social media use), peer pressure (more peer pressure may increase social media use and decrease happiness), etc..
+
+Hence, even with a relatively simple question about causality, we can easily find many ways in which to critique the approach, and think of alternative approaches, both in design (data collection) and modeling (data analysis). This may seem somewhat discouraging. But the important take away is: When we are honest about our intentions (e.g., we are interested in the causal effects of social media use and happiness on each other), then we can have an open disucssion about our approach and how this could be improved or complemented in other studies. And what is also important to keep in mind: To answer such questions, we need always need more than one study; we need variations in population, in measurements, in design, and in analyses, to get the full picture, as life is inherently complicated (and fascinating).  
+
+---
+

@@ -1,0 +1,272 @@
+---
+title: "Supplemantary Materials for: The Curious Case of the Cross-Sectional Correlation"
+author: "Ellen Hamaker"
+date: "2022"
+mainfont: Arial
+fontsize: 12pt
+urlcolor: blue
+output:
+  html_document:
+    toc: true
+    toc_depth: 5
+    toc_float: true
+    df_print: paged
+    theme: paper
+  pdf_document:
+    latex_engine: xelatex
+    toc: yes
+    toc_depth: '5'
+params:
+  rcode: true
+  answers: true
+---
+
+This serves as supporting materials to the manuscript entitled ``The Curious Case of the Cross-Sectional Correlation'', which I wrote for the special issue of Multivariate Behavioral Research in honor of Peter Molenaar's work.
+
+Peter Molenaar showed that when ergodicity is absent--meaning that individuals are characterized by different means, variances, covariances, et cetera--the results obtained from cross-sectional data will not adequately reflect the patterns that exist at the individual level. 
+
+Researchers inspired by Molenaar's work have considered how the cross-sectional correlation is related to the correlation of a single individual, which I refer to as the person-specific correlation. How these two correlations are related, is explained and illustrated with several numerical examples below. The outline is as follows:
+
+* An intuitive presentation of the two correlations of interest
+
+* General set up of the simulations, including the introduction of other correlations and quantities that are needed to connect the cross-sectional correlation to the person-specific correlation
+
+* Examples based on specific constellations of parameter values, and simulated data from which specific correlations of interest are estimated
+
+
+# Two corrrelations of interest
+To get an initial understanding of the difference between the cross-sectional correlation and the person-specific correlation, it is helpful to make use of Cattell's databox. Cattell's databox shows that there are three dimensions in which we can sample: variables, persons, and time points. 
+
+Here we will consider only the latter two dimensions, while keeping the variables fixed: These are referred to as $X$ and $Y$. The databox then can be visualized as
+
+
+![_Fig.1: Cattell's databox for two variables $X$ and $Y$_](CattellDatabox1.jpg){width=60%}
+
+When considering __cross-sectional data__, we obtain a horizontal slice from this databox, consisting of one occasion and many persons, which can be visualized as
+
+![_Fig.2: Cross-sectional data represented as a slice from Cattell's databox_](CattellDatabox2.jpg){width=60%}
+
+When consider __single subject ($N=1$)__ data, we obtain a slice in the vertical direction, which can be visualized as
+
+![_Fig.3: Single subject ($N=1$) data represented as a slice from Cattell's databox_](CattellDatabox3.jpg){width=60%}
+When looking at the databox in this way, it is not difficult to imagine that different individuals may be characterized by different person-specific correlations. Hence, in general the person-specific correlation will not be identical to the cross-sectional correlation.
+
+What is less clear from Cattell's databox, is that there may also be individual differences in means; such stable between-person differences will contribute to the cross-sectional data, and hence, the cross-sectional correlation may be expected to lie somewhere in between the average person-specific correlation and the between-person correlation between person-specific means. 
+
+However, in the MBR paper, I show two curiosities:
+
+* The cross-sectional correlation is a weighted sum of the between-person correlation and the within-person correlation (i.e., the correlation across individuals of their temporary deviations from their person-specific means); the weights are determined by the intraclass correlations, and need not add up to one; as a result, the cross-sectional correlation may lie closer to 0 than both the between-person and the within-person correlation.
+
+* The within-person correlation that is defined as the correlation across persons of within-person deviations from one's person-specific means, is *not* the same as the average person-specific correlation; it is only the same under specific circumstances (such as ergodicity)
+
+
+
+
+# General set-up
+To simulate the data, we make use of the fact that a score for an individual can be conceived of as a person's mean and a temporary deviation from that mean, that is
+$$ x_{pt} = E[X|P=p] + x_{W,pt}$$
+These two parts can be simulated separately. 
+
+## a. Within-person components 
+To simulate the __within-person components__ $x_{W,pt}$ and $y_{W,pt}$, we need the person-specific covariance $cov(X,Y|P=p)$ and the person-specific variances $var(X|P=p)$ and $var(Y|P=p)$. From these, the person-specific correlation can be computed as
+$$ \kappa_p = \frac{cov(X,Y|P=p)}{\sqrt{var(X|P=p)}\sqrt{var(Y|P=p)}}$$
+
+
+While in practice it is likely that these quantities vary continuously across individuals, here we make use of two possible constellations of a covariance and variances (and we always use $var(X|P=p)=var(Y|P=p)$); half of the population is characterized by one set of parameter values, while the other is characterized by the other set of parameter values. This implies that:
+
+* the average person-specific variances $\sigma^2_{WX}=E[var(X|P)]$ and $\sigma^2_{WY}=E[var(Y|P)]$ are simply the average of the two values that are used for the persons-specific variances (e.g., if half the people have a variance of 2 and the other half have a variance of 6, the average person-specific variance is (2+6)/2 = 4)
+
+* the average person-specific covariance $\sigma_{WX,WY}=E[cov(X,Y|P)]$ is simply the average of the two values that are used for the person-specific covariance (e.g., if half of the people have a covariance of 1 and the other half have a covariance of 2, the average person-specific covariance is (1+2)/2 = 1.5)
+
+* the average person-specific correlation $\kappa$ is simply the correlation per person $\kappa_p$ averaged across persons, such that in this case it becomes the average of the two correlations that exist in the population (e.g., if half of the people have a correlation of 0.5 and the other half have a correlation of 0.333, the average person-specific correlation is (0.5+0.333)/2 = 0.417)
+
+
+## b. Between-person components
+To simulate the __between-person components__ $E[X|P]$ and $E[Y|P]$, we need to have the between-person covariance $\sigma_{BX,BY}=cov(E[X|P],E[Y|P])$ and the between-person variances $\sigma^2_{BX}=var(E[X|P])$ and $\sigma^2_{BY}=var(E[Y|P])$. Instead of choosing these directly here, we choose the between-person correlation $\rho_B$ and the intraclass-correlations $\eta^2_{BX}$ and $\eta^2_{BY}$. 
+
+The intraclass correlation can be expressed as a function of the between-person variance and the within-person variance in the following way:
+$$ \eta^2_{BX} = \frac{var(E[X|P])}{var(X)} = \frac{var(E[X|P])}{var(E[X|P])+E[var(X|P)]} = \frac{\sigma^2_{BX}}{\sigma^2_{BX}+\sigma^2_{WX}}.$$  
+We need to rewrite this to get an expression of the between-person variance as a function of the intraclass correlation and the within-person correlation. To this end, we first multiply both sides with the denominator from the right-side, to get:
+$$ \eta^2_{BX}(\sigma^2_{BX}+\sigma^2_{WX})= \eta^2_{BX}\sigma^2_{BX}+\eta^2_{BX}\sigma^2_{WX} = \sigma^2_{BX}.$$ 
+Then we subtract $\eta^2_{BX}\sigma^2_{BX}$ from both sides to get:
+$$ \eta^2_{BX}\sigma^2_{WX} = \sigma^2_{BX}- \eta^2_{BX}\sigma^2_{BX}\\
+\;\;\;\;\;\;\;\;\;\;\;\;= (1 - \eta^2_{BX})\sigma^2_{BX}.$$  
+Dividing both sides by $(1 - \eta^2_{BX})$ gives us the following expression for the between-person variance:
+
+$$\sigma^2_{BX} = \frac{\sigma^2_{WX}\eta^2_{BX}}{1 - \eta^2_{BX}}$$  
+Hence, using the latter expression, we can determine what the between-person variance should be to get a certain intraclass correlation when the within-person variance is given. This expression can also be used for variable $Y$. 
+
+Once the between-person variances have been computed, the between-person covariance can be determined using the fact that the between-person correlation can be expressed as
+$$ \rho_B = \frac{\sigma_{BX,BY}}{\sigma_{BX}\sigma_{BY}}$$
+such that
+$$ \sigma_{BX,BY} = \sigma_{BX}\sigma_{BY}\rho_B.$$
+Once the between-person variances and covariance have been determined, we can simulate data at the between-person level. 
+
+## c. In sum
+These are the quantities that for which we need to choose values to be able to simulate data:
+
+| Quantity| Description |
+|:-----------|:----------------------------|
+$cov(X,Y|P)$ | Covariance between $X$ and $Y$ for person $P$
+$var(X|P)$ | Variance of $X$ for person $P$
+$var(Y|P)$ | Variance of $Y$ for person $P$
+$\eta^2_{BX}$ | Intraclass correlation of variable $X$, indicating the proportion of between-person variance (i.e., variance due to stable between-person differences) within-person variance |
+$\eta^2_{BY}$ | Intraclass correlation of variable $Y$ (see explanation above)
+$\rho_B$| Between-person correlation based on the person-specific means
+
+Based on these quantities, we can compute
+
+| Quantity| Description |
+|:-----------|:----------------------------|
+$\sigma^2_{WX} = E[var(X|P)]$ | Average person-specific variance on $X$
+$\sigma^2_{WY} = E[var(Y|P)]$ | Average person-specific variance on $Y$
+$\sigma_{WX,WY} = E[cov(X,Y|P)]$ | Average person-specific covariance between $X$ amd $Y$
+$\sigma^2_{BX} = var(E[X|P])$ | Variance of person-specific means on $X$ (i.e., the between-person variance of $X$)
+$\sigma^2_{BY} = var(E[Y|P])$ | Variance of person-specific means on $Y$ (i.e., the between-person variance of $Y$)
+$\sigma_{BX,BY} = cov(E[X|P],E[Y|P])$ | Covariance between person-specific means on $X$ and $Y$ (i.e., the between-person covariance)
+
+
+With these quantities we can simulate data. 
+
+But these also allow us to determine the true values for the correlations of interest, that is
+
+| Equation | Explanation |
+|:-------------------|:----------------------------|
+$$\kappa_p  = \frac{cov(X,Y|P)}{\sqrt{var(X|P)}\sqrt{var(Y|P)}}$$|Person-specific correlation based on correlating $X$ and $Y$ over time for person $P=p$ (i.e., Cattell's intra-individual correlation) |
+$$\kappa  = \mathrm{E}\Biggl[ \frac{cov(X,Y|P)}{\sqrt{var(X|P)}\sqrt{var(Y|P)}} \Biggr]$$ | Average person-specific correlation
+$$ \rho_{W} = \frac{\sigma_{WX,WY}}{\sigma_{WX}\sigma_{WY}} = \frac{\mathrm{E}\bigl[cov(X,Y|P)\bigr]}{\sqrt{\mathrm{E}\bigl[var(X|P)\bigr]}\sqrt{\mathrm{E}\bigl[var(Y|P)\bigr]}}$$ | Within-person correlation based on correlating the occasion-specific deviations from person-specific means on $X$ and $Y$ (at a particular $t$) across persons |
+$$\rho_{B} = \frac{\sigma_{BX,BY}}{\sigma_{BX}\sigma_{BY}} = \frac{cov\bigl(\mathrm{E}[X|P],\mathrm{E}[Y|P]\bigr)}{\sqrt{var\bigl(\mathrm{E}[X|P]\bigr)}\sqrt{var\bigl(\mathrm{E}[Y|P]\bigr)}}$$| Between-person correlation based on correlating the person-specific means on $X$ and $Y$ across persons |
+$$\rho = \frac{\sigma_{X,Y}}{\sigma_X\sigma_Y}=\frac{E[cov(X,Y|P)]}{\sqrt{E[var(X|P)]}\sqrt{E[var(Y|P)]}} = \eta_{BX}\eta_{BY}\rho_B + \eta_{WX}\eta_{WY}\rho_W$$|Cross-sectional correlation based on correlating the scores on $X$ and $Y$ (at a particular occasion $t$) across persons
+
+
+
+
+
+# Examples
+
+## a. Example 1
+
+We will simulate data for $N=10,000$ and $TP=10,000$. 
+
+
+```{r block1, echo=T, eval=T, message=F, include=params$rcode}
+library(mvtnorm)
+set.seed(2947)
+
+# Total sample size
+N <- 10000   # number pf persons
+TP <- 10000   # number of time points
+```
+
+
+
+
+In the first example, we use the following parameter values for the person-specific covariance and variances:
+
+| Quantity| Value |
+|:-----------|:----------------------------|
+$cov(X,Y|P)$ | 1 in all individuals|
+$var(X|P)$ | 1.25 in haf of the individuals; 5 in the other half|
+$var(Y|P)$ | identical to $var(X|P)$|
+
+Including these in matrices, we get:
+
+
+```{r block2, echo=T, eval=T, message=F, include=params$rcode}
+# Specify two person-specific covariance matrices for two subpopulations
+cov.mat1 <- matrix(c(1.25,1,1,1.25),2,2)
+cov.mat2 <- matrix(c(5,1,1,5),2,2)
+```
+
+Based on this we can compute:
+
+* the person-specific correlation in the first half of the population: $$\kappa_p = \frac{1}{1.25} = 0.8$$
+
+* the person-specific correlation in the other half of the population: $$\kappa_p = \frac{1}{55} = 0.2$$
+
+* the average person-specific correlation: $$\kappa = \frac{0.8+0.2}{2} = 0.5$$
+
+```{r block3, echo=T, eval=T, message=F, include=params$rcode}
+# The average person-specific correlation can be determined
+kappa1 <- cov.mat1[2,1]/(sqrt(cov.mat1[1,1])*sqrt(cov.mat1[2,2]))
+kappa2 <- cov.mat2[2,1]/(sqrt(cov.mat2[1,1])*sqrt(cov.mat2[2,2]))
+kappa <- (kappa1+kappa2)/2
+kappa
+```
+
+
+We can also compute:
+
+* the average person-specific covariance $$E[cov(X,Y|P)] = \frac{1+1}{2} = 1$$
+
+* the average person-specific variance $$E[var(X|P)] = \frac{1.25+5}{2} = 3.125$$ 
+
+* the average person-specific variance $$E[var(Y|P)] = \frac{1.25+5}{2} = 3.125$$
+
+* the correlation of within-person deviations: $$\rho_W = \frac{1}{3.125} = 0.32$$
+
+
+```{r block4, echo=T, eval=T, message=F, include=params$rcode}
+# Determine the average person-specific variances and covariance
+var.wX <- (cov.mat1[1,1] + cov.mat2[1,1])/2
+var.wY <- (cov.mat1[2,2] + cov.mat2[2,2])/2
+cov.wXwY <- (cov.mat1[2,1]+cov.mat2[2,1])/2
+
+# From these the within-person correlation can be computed:
+rhoW <- cov.wXwY/(sqrt(var.wX)*sqrt(var.wY))
+rhoW
+```
+
+
+This already shows that $\kappa \neq \rho_W$, that is, the average person-specific correlation is not the same as the within-person correlation $\rho_W$ from the WABA expression. 
+
+
+Furthermore, we have to choose the intraclass correlations for $X$ amd $Y$ (which will determine the variances of these variables at the between-person level), and the correlation at the between-person level (which, in combination with the variances at the between-person level will determine the covariance at the between-person level). Here we use:
+
+| Quantity| Value |
+|:-----------|:----------------------------|
+$\eta^2_{BX}$ | 0.1
+$\eta^2_{BY}$ | 0.9
+$\rho_B$| 0.5
+
+Note that the between-person correlation is chosen to be identical to the average person-specific correlation. 
+
+```{r block5, echo=T, eval=T, message=F, include=params$rcode}
+# Specify the correlation at the between-person level
+# and choose the intraclass correlations for $X$ and $Y$
+rhoB <- 0.5
+icc.X <- 0.1
+icc.Y <- 0.9
+```
+
+From these values, we can compute:
+
+* the between-person variance $$var(E[X|P]) = \sigma_{BX}^2 = \frac{1-\eta^2_{BX}}{\eta^2_{BX}\sigma_{WX}^2} = \frac{0.1*3.125}{1-0.1} = 0.347$$
+
+* the between-person variance $$var(E[Y|P]) = \sigma_{BY}^2 = \frac{1-\eta^2_{BY}}{\eta^2_{BY}\sigma_{WY}^2} = \frac{0.9*3.125}{1-0.9} = 28.125$$
+
+
+* the between-person covariance $$cov(E[X,Y|P]) = \sigma_{BX}\sigma_{BY}\rho_B = \sqrt{0.347}\sqrt{28.125}*0.5 = 1.563$$
+
+```{r block6, echo=T, eval=T, message=F, include=params$rcode}
+# Compute the between-person variances based on the icc's and the average 
+# person-specific variances
+var.bX <- icc.X*var.wX/(1-icc.X)
+var.bX
+var.bY <- icc.Y*var.wY/(1-icc.Y)
+var.bY
+
+# Compute the between-person covariance based on the between-person correlation
+# and the between-person variances
+cov.bXbY <- rhoB*sqrt(var.bX)*sqrt(var.bY)
+cov.bXbY
+
+# Place these values in a covariance matrix
+cov.mat.B <- matrix(c(var.bX,cov.bXbY,cov.bXbY,var.bY),2,2)
+```
+
+
+Now we can simulate the data, and esitmate the various correlations from these. 
+
+
+---

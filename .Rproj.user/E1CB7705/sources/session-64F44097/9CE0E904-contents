@@ -1,0 +1,78 @@
+
+
+rm(list=ls())
+
+library(tidyverse)
+
+
+res1 <- matrix(,400,7)
+res2 <- matrix(,20,20)
+
+for (h in 1:20){
+for (k in 1:20){
+var1 <- (h-1)/4 + 1   # person-specific variance for X and Y in half of the people
+var2 <- (k-1)/4 + 1   # person-specific variance for X and Y for the other half
+cov <- 1    # person-specific covariance between X and Y for all people
+            # (should be at least as large as the minimum of var1 and var2)
+
+# Compute the average person-specific correlation
+cor1 <- cov/var1    # person-specific correlation in first half
+cor2 <- cov/var2    # person-specific correlation in second half
+kappa <- (cor1+cor2)/2  # average person-specific correlation
+
+
+# Computer the within-person correlation from the WABA expression
+WP.var <- (var1+var2)/2     # average person-specific variance for X and Y
+rho.W <- cov/WP.var         # WP correlation
+
+# Consider the difference between these two correlations
+d <- kappa - rho.W
+
+res1[(h-1)*20 + k,] <- c((h-1)/4 + 1,(k-1)/4 + 1,cor1,cor2,kappa,rho.W,d)
+
+res2[h,k] <- d
+
+}}
+
+round(res1,2)
+
+
+round(res2,2)
+
+rownames(res2) <- c("1","2","3","4","5",
+                   "6","7","8","9","10",
+                   "11","12","13","14","15",
+                   "16","17","18","19","20")
+
+colnames(res2) <- c("1","2","3","4","5",
+                    "6","7","8","9","10",
+                    "11","12","13","14","15",
+                    "16","17","18","19","20")
+
+
+expand.grid(colnames(res2), rownames(res2)) %>% 
+  as.tibble %>% 
+  mutate(z = c(res2)) %>% 
+  ggplot(aes(x = Var1, y = Var2, fill = z)) +
+  geom_tile() +
+  scale_fill_gradient(low = "black", high = "grey92") +
+  labs(
+    x = "Intraclass correlation of X",
+    y = "Intraclass correlation of Y",
+    fill = "Sum of the weights" #,title = ""
+  ) +
+  theme(panel.grid = element_blank(), 
+        panel.background = element_blank(), 
+        axis.ticks = element_blank())+ coord_fixed() 
+
+
+
+
+
+
+
+
+
+
+
+
