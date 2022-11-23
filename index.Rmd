@@ -39,6 +39,7 @@ The data for this example can be found  [here](https://ellenhamaker.github.io/DS
 
 
 ## Multilevel model
+The data for this example can be found  [here](https://ellenhamaker.github.io/DSEM-demo-videos/Nis1model.dat).
 Materials to be added later.
 
 ## Bayesian model estimation
