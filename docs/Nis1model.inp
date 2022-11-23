@@ -1,0 +1,25 @@
+TITLE: N=1 bivariate DSEM model
+
+DATA:       
+    FILE = Nis1data.dat;
+
+VARIABLE:   
+    NAMES = y x;
+    LAGGED = y(1) x(1);
+    MISSING = ALL(-999);
+
+ANALYSIS:
+    ESTIMATOR = BAYES;
+    BITER = (1000);
+    PROC = 2;
+
+MODEL:
+    y ON y&1  x;
+    x ON y&1 x&1;
+
+OUTPUT:
+    TECH1 TECH8 STDYX;
+
+PLOT:
+    TYPE = PLOT3;
+

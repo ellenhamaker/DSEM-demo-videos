@@ -1,0 +1,47 @@
+TITLE: Multilevel DSEM model 5 with level 2 predictor not centered
+
+       Within level:
+       - no parameters at this level
+
+       Between level:
+       - two random means and four random slopes and random (log) variances
+       - all random effects are regressed on an observed predictor; this variable is NOT centered 
+
+DATA:
+    file = MLdata.dat;
+    
+VARIABLE:
+    NAMES ARE CL TE N RS time person; 
+    USEVARIABLES = CL TE N;
+    BETWEEN = N;
+    CLUSTER = person;
+    LAGGED = CL(1) TE(1);
+    TINTERVAL = time(1);
+
+! DEFINE:	
+!   CENTER N (GRANDMEAN);
+
+ANALYSIS:   
+    TYPE = TWOLEVEL RANDOM;
+    ESTIMATOR = BAYES;
+    PROC = 4;
+    BITER = (5000);
+
+MODEL: 
+    %WITHIN%
+    phiCL | CL ON CL&1;
+    betaCL | CL ON TE;
+    phiTE | TE ON TE&1;
+    betaTE | TE ON CL&1;
+    logVCL | CL;
+    logVTE | TE;
+
+    %BETWEEN%
+    CL TE phiCL-logVTE ON N;
+
+OUTPUT:
+     TECH1 TECH8 STDYX;
+
+PLOT:
+    TYPE = PLOT3;
+    FACTOR = ALL(100);

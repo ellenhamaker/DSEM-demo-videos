@@ -1,0 +1,39 @@
+TITLE: Multilevel DSEM model 1 with TINTERVAL
+
+       Within level:
+       - non-random slopes and non-random residual variances
+
+       Between level:
+       - only random means
+
+DATA:
+    file = MLdata.dat;
+    
+VARIABLE:
+    NAMES ARE CL TE N RS time person; 
+    USEVARIABLES = CL TE;
+    CLUSTER = person;
+    LAGGED = CL(1) TE(1);
+    TINTERVAL = time(1);
+
+ANALYSIS:   
+    TYPE = TWOLEVEL;
+    ESTIMATOR = BAYES;
+    PROC = 2;
+    BITER = (5000);  
+
+MODEL: 
+    %WITHIN%
+    CL ON CL&1;
+    CL ON TE;
+    TE ON TE&1;
+    TE ON CL&1;
+
+    %BETWEEN%
+    CL WITH TE;
+
+OUTPUT:
+    TECH1 TECH8;
+
+PLOT:
+    TYPE = PLOT3;
