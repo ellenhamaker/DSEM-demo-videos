@@ -1,7 +1,7 @@
 ---
 title: "DSEM demo videos: Supporting materials"
 author: "Ellen Hamaker"
-date: "Last update: October, 2022"
+date: "Last update: November, 2022"
 mainfont: Arial
 output:
   html_document:
@@ -14,27 +14,31 @@ output:
     latex_engine: xelatex
     toc: yes
     toc_depth: '5'
-fontsize: 12pt
+font_size: 19pt
 urlcolor: green
 params:
   rcode: true
   answers: true
 ---
 
-This page will contain the Mplus input and output files, and the simulated data files that are used for the DSEM demo videos.
+$~$
 
+This page contains the Mplus input and output files, and the simulated data files that are used for the DSEM demo videos.
+
+$~$
 
 # Introduction
 Dynamics structural equation modeling (DSEM) is based on a combination of time series modeling, multilevel modeling, and structural equation modeling. It can be used to analyze time series data and intensive longitudinal data, such as obtained with daily diaries, ecological momentary assessments, experience sampling, ambulatory assessments, and other techniques that tend to result in (relatively) large numbers of repeated measures (say, more than 20) per case. 
 
 More information about DSEM and how it was implemented in the software package Mplus can be found here: https://ellenhamaker.github.io/DSEM-book-chapter/ and here: https://www.statmodel.com/TimeSeries.shtml.
 
- 
 
-# Topics 
+$~$ 
+
+# DSEM models 
 The DSEM demo videos show how to use Mplus to specify specific models, and how to interpret the output. In addition, there are also videos that focus on various aspects related to DSEM analyses, such as Bayesian estimation and plotting options. 
 
-## N=1 models
+## $\triangleright$ N=1 models
 Here are the links to the 
 
 * [N=1 data](https://ellenhamaker.github.io/DSEM-demo-videos/Nis1data.dat)
@@ -44,7 +48,7 @@ Here are the links to the
 * [Mplus output](https://ellenhamaker.github.io/DSEM-demo-videos/nis1model.htm)
 
 
-## Multilevel model
+## $\triangleright$ Multilevel model
 In the DSEM demo videos on multilevel DSEM models, these data are used:
 
 * [multilevel data](https://ellenhamaker.github.io/DSEM-demo-videos/Nis1data.dat)
@@ -65,13 +69,21 @@ The models that are run as part of the demo video part 2 are:
 
 * Model 6: random means, slopes, residual variances which are predicted by a level 2 predictor and that predict a level 2 outcome (Mplus [input](https://ellenhamaker.github.io/DSEM-demo-videos/MLmodel6.inp) and [output](https://ellenhamaker.github.io/DSEM-demo-videos/mlmodel6.htm))
 
-## Bayesian model estimation
+
+$~$
+
+# Miscellaneous
+
+## $\triangleright$ Bayesian model estimation
 Materials to be added later.
 
-## Plotting options
+## $\triangleright$ Plotting options
 Materials to be added later.
 
-## TINTERVAL option
+## $\triangleright$ TINTERVAL option
+Materials to be added later.
+
+## $\triangleright$ Standardized results
 Materials to be added later.
 
 ---
