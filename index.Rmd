@@ -50,7 +50,9 @@ a:visited {
 
 $~$
 
-This page contains the __Mplus input and output files__, and the __simulated data files__ that form the basis for the __DSEM demo videos__ that I recorded; you can find the [__playlist__ here](https://www.youtube.com/watch?v=dA3HvJZDzeo&list=PLet3DgvxBn2S7N2hVW4COAwH3_VaRoujd)
+This page contains the __Mplus input and output files__, and the __simulated data files__ that form the basis for the __DSEM demo videos__ that I recorded; you can find the [__playlist__ here](https://www.youtube.com/watch?v=dA3HvJZDzeo&list=PLet3DgvxBn2S7N2hVW4COAwH3_VaRoujd).
+
+If you have comments about these materials, or suggestions for other videos on DSEM, you can contact me [here](https://www.uu.nl/medewerkers/ELHamaker).
 
 $~$
 
@@ -63,7 +65,7 @@ More information about DSEM and how it was implemented in the software package M
 $~$ 
 
 # DSEM models 
-The DSEM demo videos show how to use Mplus to specify specific models, and how to interpret the output. In addition, there are also videos that focus on various aspects related to DSEM analyses, such as Bayesian estimation and plotting options. 
+The DSEM demo videos show how to use Mplus to specify specific models, and how to interpret the output. In addition, there will also be videos that focus on various aspects related to DSEM analyses, such as Bayesian estimation and useful plotting options. 
 
 $~$
 
