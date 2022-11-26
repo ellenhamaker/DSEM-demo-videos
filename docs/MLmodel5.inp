@@ -1,11 +1,11 @@
-TITLE: Multilevel DSEM model 5
+TITLE: Multilevel DSEM model 5 with TINTERVAL
 
        Within level:
        - no parameters at this level
 
        Between level:
-       - two random means and four random slopes and random (log) variances
-       - all random effects are regressed on an observed predictor 
+       - two random means, four random slopes, and two random (log) variances
+       - all random effects are regressed on an observed predictor (which is grand mean centered)
 
 DATA:
     file = MLdata.dat;

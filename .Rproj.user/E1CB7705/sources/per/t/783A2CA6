@@ -1,26 +1,26 @@
 {
-    "id": "EB159671",
-    "path": "C:/Users/hamak103/OneDrive - Universiteit Utrecht/My files/onderwijs/ADSmasterR/R in Week 2/Week2_Rcode+answers.Rmd",
+    "id": "783A2CA6",
+    "path": "C:/Users/hamak103/OneDrive - Universiteit Utrecht/My files/Github/Cross-sectional correlation/cross-sectional-correlation/index.Rmd",
     "project_path": null,
     "type": "r_markdown",
-    "hash": "0",
+    "hash": "2773848991",
     "contents": "",
     "dirty": false,
-    "created": 1667825992937.0,
+    "created": 1667561440148.0,
     "source_on_save": false,
     "relative_order": 7,
     "properties": {
         "source_window_id": "",
         "Source": "Source",
-        "cursorPosition": "36,0",
-        "scrollLine": "24"
+        "cursorPosition": "1922,29",
+        "scrollLine": "0"
     },
     "folds": "",
-    "lastKnownWriteTime": 1637339247,
+    "lastKnownWriteTime": 1667564603,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1637339247,
+    "last_content_update": 1667564603120,
     "read_only": false,
     "read_only_alternatives": []
 }

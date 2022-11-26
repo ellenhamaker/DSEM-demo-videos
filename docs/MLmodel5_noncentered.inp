@@ -1,10 +1,10 @@
-TITLE: Multilevel DSEM model 5 with level 2 predictor not centered
+TITLE: Multilevel DSEM model 5 with level 2 predictor NOT centered
 
        Within level:
        - no parameters at this level
 
        Between level:
-       - two random means and four random slopes and random (log) variances
+       - two random means, four random slopes, and two random (log) variances
        - all random effects are regressed on an observed predictor; this variable is NOT centered 
 
 DATA:

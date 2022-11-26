@@ -1,4 +1,4 @@
-TITLE: Multilevel DSEM model 1
+TITLE: Multilevel DSEM model 1 (not accounting for missing obersvations)
 
        Within level:
        - non-random slopes and non-random residual variances
@@ -32,7 +32,7 @@ MODEL:
     CL WITH TE;
 
 OUTPUT:
-    TECH1 TECH8;
+    TECH1 TECH8 STDYX;
 
 PLOT:
     TYPE = PLOT3;
