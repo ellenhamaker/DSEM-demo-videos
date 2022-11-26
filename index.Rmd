@@ -1,7 +1,7 @@
 ---
 title: "DSEM demo videos: Supporting materials"
-author: "Ellen Hamaker"
-date: "Last update: November, 2022"
+author: "Ellen Hamaker | Methodology & Statistics | Faculty of Social and Behavioural Sciences | Utrecht University"
+date: "_Last update: November, 2022_"
 mainfont: Arial
 output:
   html_document:
@@ -27,11 +27,11 @@ params:
 
 <style>
 a:link {
-    color: #00A48D;
+    color: #12BA82;
 }
 
 a:visited {
-    color: purple;
+    color: #006859;
 }
 
  a:hover {
@@ -50,14 +50,14 @@ a:visited {
 
 $~$
 
-This page contains the Mplus input and output files, and the simulated data files that are used for the DSEM demo videos.
+This page contains the __Mplus input and output files__, and the __simulated data files__ that form the basis for the __DSEM demo videos__ that I recorded; you can find the [__playlist__ here](https://www.youtube.com/watch?v=dA3HvJZDzeo&list=PLet3DgvxBn2S7N2hVW4COAwH3_VaRoujd)
 
 $~$
 
 # Introduction
 Dynamics structural equation modeling (DSEM) is based on a combination of time series modeling, multilevel modeling, and structural equation modeling. It can be used to analyze time series data and intensive longitudinal data, such as obtained with daily diaries, ecological momentary assessments, experience sampling, ambulatory assessments, and other techniques that tend to result in (relatively) large numbers of repeated measures (say, more than 20) per case. 
 
-More information about DSEM and how it was implemented in the software package Mplus can be found here: https://ellenhamaker.github.io/DSEM-book-chapter/ and here: https://www.statmodel.com/TimeSeries.shtml.
+More information about DSEM and how it was implemented in the software package Mplus can be found on the website for our [__DSEM book chapter__](https://ellenhamaker.github.io/DSEM-book-chapter/), and the [__Mplus website__](https://www.statmodel.com/TimeSeries.shtml).
 
 
 $~$ 
@@ -65,36 +65,54 @@ $~$
 # DSEM models 
 The DSEM demo videos show how to use Mplus to specify specific models, and how to interpret the output. In addition, there are also videos that focus on various aspects related to DSEM analyses, such as Bayesian estimation and plotting options. 
 
+$~$
+
 ## $\blacktriangleright$ N=1 models
 Here are the links to the 
 
-* [N=1 data](https://ellenhamaker.github.io/DSEM-demo-videos/Nis1data.dat)
+* [__N=1 simulated data__](https://ellenhamaker.github.io/DSEM-demo-videos/Nis1data.dat)
 
-* [Mplus input](https://ellenhamaker.github.io/DSEM-demo-videos/Nis1model.inp)
+* [__Mplus input__](https://ellenhamaker.github.io/DSEM-demo-videos/Nis1model.inp) discussed in [__this video__](https://www.youtube.com/watch?v=dA3HvJZDzeo&list=PLet3DgvxBn2S7N2hVW4COAwH3_VaRoujd&index=1)
 
-* [Mplus output](https://ellenhamaker.github.io/DSEM-demo-videos/nis1model.htm)
+* [__Mplus output__](https://ellenhamaker.github.io/DSEM-demo-videos/nis1model.htm) discussed in [__this video__](https://www.youtube.com/watch?v=xFn8PmWVVbQ&list=PLet3DgvxBn2S7N2hVW4COAwH3_VaRoujd&index=2)
+
+$~$
 
 
 ## $\blacktriangleright$ Multilevel model
-In the DSEM demo videos on multilevel DSEM models, these data are used:
+The simulated data that are used in the DSEM demo videos on multilevel models can be found [__here__](https://ellenhamaker.github.io/DSEM-demo-videos/MLdata.dat).
 
-* [multilevel data](https://ellenhamaker.github.io/DSEM-demo-videos/Nis1data.dat)
+<br>
 
-The models that are run as part of the demo video part 1 are:
+### Part 1: Basic dynamic multilevel models
 
-* Model 1: random means, no random slopes, no random residual variances (Mplus [input](https://ellenhamaker.github.io/DSEM-demo-videos/MLmodel1.inp) and [output](https://ellenhamaker.github.io/DSEM-demo-videos/mlmodel1.htm))
+Several __basic dynamic multilevel models__ are discussed in the part 1 videos, with one focusing on the [__input__](https://www.youtube.com/watch?v=y6-QNQ-3iR4&list=PLet3DgvxBn2S7N2hVW4COAwH3_VaRoujd&index=3), and the other focusing on the [__parameter estimates__](https://www.youtube.com/watch?v=mD6F8TbT5_E&list=PLet3DgvxBn2S7N2hVW4COAwH3_VaRoujd&index=4).
 
-* Model 2: random means, random slopes, no random residual variances (Mplus [input](https://ellenhamaker.github.io/DSEM-demo-videos/MLmodel2.inp) and [output](https://ellenhamaker.github.io/DSEM-demo-videos/mlmodel2.htm))
+The models covered include:
 
-* Model 3: random means, random slopes, and residual variances that covary (Mplus [input](https://ellenhamaker.github.io/DSEM-demo-videos/MLmodel3.inp) and [output](https://ellenhamaker.github.io/DSEM-demo-videos/mlmodel3.htm))
+* __Model 1__: random means; non-random slopes and non-random residual variances (Mplus [input](https://ellenhamaker.github.io/DSEM-demo-videos/MLmodel1.inp) and [output](https://ellenhamaker.github.io/DSEM-demo-videos/mlmodel1.htm))
 
-The models that are run as part of the demo video part 2 are:
+* __Model 2__: random means and random slopes; non-random residual variances (Mplus [input](https://ellenhamaker.github.io/DSEM-demo-videos/MLmodel2.inp) and [output](https://ellenhamaker.github.io/DSEM-demo-videos/mlmodel2.htm))
 
-* Model 4: random means, slopes, residual variances which are indicators of a latent variable (Mplus [input](https://ellenhamaker.github.io/DSEM-demo-videos/MLmodel4.inp) and [output](https://ellenhamaker.github.io/DSEM-demo-videos/mlmodel4.htm))
+* __Model 3__: random means, random slopes, and residual variances that covary (Mplus [input](https://ellenhamaker.github.io/DSEM-demo-videos/MLmodel3.inp) and [output](https://ellenhamaker.github.io/DSEM-demo-videos/mlmodel3.htm))
 
-* Model 5: random means, slopes, residual variances which are predicted by a level 2 predictor (Mplus [input](https://ellenhamaker.github.io/DSEM-demo-videos/MLmodel5.inp) and [output](https://ellenhamaker.github.io/DSEM-demo-videos/mlmodel5.htm))
 
-* Model 6: random means, slopes, residual variances which are predicted by a level 2 predictor and that predict a level 2 outcome (Mplus [input](https://ellenhamaker.github.io/DSEM-demo-videos/MLmodel6.inp) and [output](https://ellenhamaker.github.io/DSEM-demo-videos/mlmodel6.htm))
+<br>
+
+### Part 2: More advanced dynamic multilevel models
+
+
+More __advanced dynamic multilevel models (with structural equation modeling at the between level)__ are discussed in the part 2 videos, with one focusing on the [__input__](https://www.youtube.com/watch?v=5q6wljmgwh0&list=PLet3DgvxBn2S7N2hVW4COAwH3_VaRoujd&index=5), and the otehr focusing on the [__parameter estimates__](https://www.youtube.com/watch?v=bTKeLe6AX-A&list=PLet3DgvxBn2S7N2hVW4COAwH3_VaRoujd&index=6).
+
+The models covered include:
+
+* __Model 4__: random means, slopes, residual variances which are indicators of a latent variable (Mplus [input](https://ellenhamaker.github.io/DSEM-demo-videos/MLmodel4.inp) and [output](https://ellenhamaker.github.io/DSEM-demo-videos/mlmodel4.htm))
+
+* __Model 5__: random means, slopes, residual variances which are predicted by a level 2 predictor that is grand mean centered (Mplus [input](https://ellenhamaker.github.io/DSEM-demo-videos/MLmodel5.inp) and [output](https://ellenhamaker.github.io/DSEM-demo-videos/mlmodel5.htm))
+
+* __Model 5 (noncentered)__: random means, slopes, residual variances which are predicted by a level 2 predictor that is NOT centered (Mplus [input](https://ellenhamaker.github.io/DSEM-demo-videos/MLmodel5_noncentered.inp) and [output](https://ellenhamaker.github.io/DSEM-demo-videos/mlmodel5_noncentered.htm))
+
+* __Model 6__: random means, slopes, residual variances which are predicted by a level 2 predictor and that predict a level 2 outcome (Mplus [input](https://ellenhamaker.github.io/DSEM-demo-videos/MLmodel6.inp) and [output](https://ellenhamaker.github.io/DSEM-demo-videos/mlmodel6.htm))
 
 
 $~$
@@ -112,5 +130,19 @@ Materials to be added later.
 
 ## $\triangleright$ Standardized results
 Materials to be added later.
+
+$~$
+
+
+# Funding
+
+This website and the DSEM demo videos are created as part of a project that has received funding from the European Research Council (ERC) under the European Union’s Horizon 2020 research and innovation programme (grant agreement No 865468). 
+
+$~$
+
+<center>
+![](LOGOERC.jpg){width=30%}
+</center>
+
 
 ---
