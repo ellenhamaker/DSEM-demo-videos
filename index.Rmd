@@ -101,7 +101,7 @@ The models covered include:
 
 <br>
 
-### Part 2: More advanced dynamic multilevel models
+### Part 2: More advanced DSEM models
 
 
 More __advanced dynamic multilevel models (with structural equation modeling at the between level)__ are discussed in the part 2 videos, with one focusing on the [__input__](https://www.youtube.com/watch?v=5q6wljmgwh0&list=PLet3DgvxBn2S7N2hVW4COAwH3_VaRoujd&index=5), and the otehr focusing on the [__parameter estimates__](https://www.youtube.com/watch?v=bTKeLe6AX-A&list=PLet3DgvxBn2S7N2hVW4COAwH3_VaRoujd&index=6).
@@ -121,6 +121,12 @@ Models that are discussed in these videos---and models that are closely related 
 * __Model 6__: random means, slopes, (log) residual variances which are predicted by a level 2 predictor and that predict a level 2 outcome (Mplus [input](https://ellenhamaker.github.io/DSEM-demo-videos/MLmodel6.inp) and [output](https://ellenhamaker.github.io/DSEM-demo-videos/mlmodel6.htm))
 
 (NB: There are some very minor differences in the output provided here for models 5 and 6 compared to the results in the video; I used PROC=2 here, whereas PROC=4 for these models in the video.)
+
+
+And here is a bonus model, combining path analysis and factor analysis at the between-person level:
+
+* __Model 7__: random means, slopes, (log) residual variances are indicators of a latent variable; this latent variable is a mediator between a level 2 predictor and a level 2 outcome (Mplus [input](https://ellenhamaker.github.io/DSEM-demo-videos/MLmodel7_thin10.inp) and [output](https://ellenhamaker.github.io/DSEM-demo-videos/mlmodel7_thin10.htm))
+
 
 
 $~$
