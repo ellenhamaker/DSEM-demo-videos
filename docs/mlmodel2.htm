@@ -43,7 +43,7 @@ a:visited
 <p class="heading">
 Mplus VERSION 8.8<br />
 MUTHEN & MUTHEN<br />
-11/24/2022   9:41 AM<br />
+11/27/2022  10:10 AM<br />
 </p>
 
 <p class='heading'>OUTPUT SECTIONS</p>
@@ -81,43 +81,65 @@ MUTHEN & MUTHEN<br />
          - all random effects are allowed to be correlated
 
   DATA:
-      file = MLdata.dat;
+      file = MLdata.dat;                  ! data file
 
   VARIABLE:
-      NAMES ARE CL TE N RS time person;
-      USEVARIABLES = CL TE;
-      CLUSTER = person;
-      LAGGED = CL(1) TE(1);
-      TINTERVAL = time(1);
+      NAMES ARE CL TE N RS time person;   ! variables names (in the order they appear in the
+      USEVARIABLES = CL TE;               ! which variables to include in the analysis
+      CLUSTER = person;                   ! which variable indicates the clustering of the d
+      LAGGED = CL(1) TE(1);               ! create lagged versions of CL and TE (lag 1)
+      TINTERVAL = time(1);                ! which variable indicates the timing of observati
 
   ANALYSIS:
-      TYPE = TWOLEVEL RANDOM;
-      ESTIMATOR = BAYES;
-      PROC = 2;
-      BITER = (5000);
+      TYPE = TWOLEVEL RANDOM;             ! two-level data and allow for random slopes and/o
+      ESTIMATOR = BAYES;                  ! use Bayesian estimation
+      PROC = 2;                           ! use 2 processors
+      BITER = (5000);                     ! run at least 5000 iterations (more if needed acc
 
   MODEL:
       %WITHIN%
-      phiCL | CL ON CL&1;
-      betaCL | CL ON TE;
-      phiTE | TE ON TE&1;
-      betaTE | TE ON CL&1;
+      phiCL | CL ON CL&1;                 ! random autoregression for CL
+      betaCL | CL ON TE;                  ! random cross-regression from TE_t -> CL_t
+      phiTE | TE ON TE&1;                 ! random autoregression for TE
+      betaTE | TE ON CL&1;                ! random cross-lagged regression from CL_t-1 -> TE
 
       %BETWEEN%
-      CL TE phiCL-betaTE WITH TE phiCL-betaTE;
+      CL TE phiCL-betaTE WITH
+              TE phiCL-betaTE;            ! allow all 6 random effects (2 means, 4 slopes) t
 
   OUTPUT:
-      TECH1 TECH8 STDYX;
+      TECH1 TECH8 STDYX;                  ! obtain additional output
 
   PLOT:
-      TYPE = PLOT3;
-      FACTOR = ALL(100);
+      TYPE = PLOT3;                       ! enable plot options
+      FACTOR = ALL(100);                  ! sample factor scores (for the random effects) pe
 
 
 
 <a name='inputmessages' class='heading'></a>
 
-INPUT READING TERMINATED NORMALLY
+*** WARNING
+  Input line exceeded 90 characters. Some input may be truncated.
+      CLUSTER = person;                   ! which variable indicates the clustering of the da
+*** WARNING
+  Input line exceeded 90 characters. Some input may be truncated.
+      TINTERVAL = time(1);                ! which variable indicates the timing of observatio
+*** WARNING
+  Input line exceeded 90 characters. Some input may be truncated.
+      TYPE = TWOLEVEL RANDOM;             ! two-level data and allow for random slopes and/or
+*** WARNING
+  Input line exceeded 90 characters. Some input may be truncated.
+      BITER = (5000);                     ! run at least 5000 iterations (more if needed acco
+*** WARNING
+  Input line exceeded 90 characters. Some input may be truncated.
+      betaTE | TE ON CL&1;                ! random cross-lagged regression from CL_t-1 -> TE_
+*** WARNING
+  Input line exceeded 90 characters. Some input may be truncated.
+              TE phiCL-betaTE;            ! allow all 6 random effects (2 means, 4 slopes) to
+*** WARNING
+  Input line exceeded 90 characters. Some input may be truncated.
+      FACTOR = ALL(100);                  ! sample factor scores (for the random effects) per
+   7 WARNING(S) FOUND IN THE INPUT INSTRUCTIONS
 
 
 
@@ -910,9 +932,9 @@ DIAGRAM INFORMATION
   No diagram output was produced.
 
 
-     Beginning Time:  09:41:18
-        Ending Time:  09:44:25
-       Elapsed Time:  00:03:07
+     Beginning Time:  10:10:58
+        Ending Time:  10:13:24
+       Elapsed Time:  00:02:26
 
 
 

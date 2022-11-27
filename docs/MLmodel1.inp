@@ -7,33 +7,33 @@ TITLE: Multilevel DSEM model 1 with TINTERVAL
        - only random means
 
 DATA:
-    file = MLdata.dat;
+    file = MLdata.dat;                  ! data file
     
 VARIABLE:
-    NAMES ARE CL TE N RS time person; 
-    USEVARIABLES = CL TE;
-    CLUSTER = person;
-    LAGGED = CL(1) TE(1);
-    TINTERVAL = time(1);
+    NAMES ARE CL TE N RS time person;   ! variables names (in the order they appear in the data file) 
+    USEVARIABLES = CL TE;               ! which variables to include in the analysis
+    CLUSTER = person;                   ! which variable indicates the clustering of the data
+    LAGGED = CL(1) TE(1);               ! create lagged versions of CL and TE (lag 1)
+    TINTERVAL = time(1);                ! which variable indicates the timing of observations; obtain results for an interval of 1 on this timescale
 
 ANALYSIS:   
-    TYPE = TWOLEVEL;
-    ESTIMATOR = BAYES;
-    PROC = 2;
-    BITER = (5000);  
+    TYPE = TWOLEVEL;                    ! two-level data
+    ESTIMATOR = BAYES;                  ! use Bayesian estimation
+    PROC = 2;                           ! use 2 processors
+    BITER = (5000);                     ! run at least 5000 iterations (more if needed according to PSR)
 
 MODEL: 
     %WITHIN%
-    CL ON CL&1;
-    CL ON TE;
-    TE ON TE&1;
-    TE ON CL&1;
+    CL ON CL&1;                         ! autoregression for CL
+    CL ON TE;                           ! cross-regression from TE_t -> CL_t
+    TE ON TE&1;                         ! autoregression for TE
+    TE ON CL&1;                         ! cross-lagged regression CL_t-1 -> TE_t
 
     %BETWEEN%
-    CL WITH TE;
+    CL WITH TE;                         ! person mean on CL covaries with person mean on TE
 
 OUTPUT:
-    TECH1 TECH8 STDYX;
+    TECH1 TECH8 STDYX;                  ! obtain additional output
 
 PLOT:
-    TYPE = PLOT3;
+    TYPE = PLOT3;                       ! enable plot options 

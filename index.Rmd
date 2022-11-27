@@ -106,7 +106,7 @@ The models covered include:
 
 More __advanced dynamic multilevel models (with structural equation modeling at the between level)__ are discussed in the part 2 videos, with one focusing on the [__input__](https://www.youtube.com/watch?v=5q6wljmgwh0&list=PLet3DgvxBn2S7N2hVW4COAwH3_VaRoujd&index=5), and the otehr focusing on the [__parameter estimates__](https://www.youtube.com/watch?v=bTKeLe6AX-A&list=PLet3DgvxBn2S7N2hVW4COAwH3_VaRoujd&index=6).
 
-The models covered include:
+Models that are discussed in these videos---and models that are closely related to them---are:
 
 * __Model 4__: random means, slopes, residual variances which are indicators of a latent variable (Mplus [input](https://ellenhamaker.github.io/DSEM-demo-videos/MLmodel4.inp) and [output](https://ellenhamaker.github.io/DSEM-demo-videos/mlmodel4.htm))
 
@@ -114,7 +114,13 @@ The models covered include:
 
 * __Model 5 (noncentered)__: random means, slopes, residual variances which are predicted by a level 2 predictor that is NOT centered (Mplus [input](https://ellenhamaker.github.io/DSEM-demo-videos/MLmodel5_noncentered.inp) and [output](https://ellenhamaker.github.io/DSEM-demo-videos/mlmodel5_noncentered.htm))
 
-* __Model 6__: random means, slopes, residual variances which are predicted by a level 2 predictor and that predict a level 2 outcome (Mplus [input](https://ellenhamaker.github.io/DSEM-demo-videos/MLmodel6.inp) and [output](https://ellenhamaker.github.io/DSEM-demo-videos/mlmodel6.htm))
+* __Model 5 (nocov)__: random means, slopes, (log) residual variances which are predicted by a level 2 predictor that is grand mean centered, with the residual covariance between the person specific means on CL and TE fixed to zero (Mplus [input](https://ellenhamaker.github.io/DSEM-demo-videos/MLmodel5_nocov.inp) and [output](https://ellenhamaker.github.io/DSEM-demo-videos/mlmodel5_nocov.htm))
+
+* __Model 5 (rescov)__: random means, slopes, (log) residual variances which are predicted by a level 2 predictor that is grand mean centered, with the residual covariance all estimated freely (Mplus [input](https://ellenhamaker.github.io/DSEM-demo-videos/MLmodel5_rescov.inp) and [output](https://ellenhamaker.github.io/DSEM-demo-videos/mlmodel5_rescov.htm))
+
+* __Model 6__: random means, slopes, (log) residual variances which are predicted by a level 2 predictor and that predict a level 2 outcome (Mplus [input](https://ellenhamaker.github.io/DSEM-demo-videos/MLmodel6.inp) and [output](https://ellenhamaker.github.io/DSEM-demo-videos/mlmodel6.htm))
+
+(NB: There are some very minor differences in the output provided here for models 5 and 6 compared to the results in the video; I used PROC=2 here, whereas PROC=4 for these models in the video.)
 
 
 $~$

@@ -1,4 +1,4 @@
-TITLE: Multilevel DSEM model 5 with TINTERVAL
+TITLE: Multilevel DSEM model 5 with TINTERVAL and with all residual covariances estimated
 
        Within level:
        - no parameters at this level
@@ -6,6 +6,7 @@ TITLE: Multilevel DSEM model 5 with TINTERVAL
        Between level:
        - two random means, four random slopes, and two random (log) variances
        - all random effects are regressed on an observed predictor (which is grand mean centered)
+       - all residuals are allowed to covary
 
 DATA:
     file = MLdata.dat;                  ! data file
@@ -38,6 +39,8 @@ MODEL:
 
     %BETWEEN%
     CL TE phiCL-logVTE ON N;            ! regress all 8 random effects (2 means, 4 slopes, 2 log residual variances) on the between level predictor
+    CL TE phiCL-logVTE WITH 
+            TE phiCL-logVTE;            ! allow all residuals to covary
 
 OUTPUT:
     TECH1 TECH8 STDYX;                  ! obtain additional output

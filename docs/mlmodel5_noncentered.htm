@@ -43,7 +43,7 @@ a:visited
 <p class="heading">
 Mplus VERSION 8.8<br />
 MUTHEN & MUTHEN<br />
-11/24/2022  10:33 AM<br />
+11/27/2022  10:39 AM<br />
 </p>
 
 <p class='heading'>OUTPUT SECTIONS</p>
@@ -81,43 +81,43 @@ MUTHEN & MUTHEN<br />
          - all random effects are regressed on an observed predictor; this variable is NOT c
 
   DATA:
-      file = MLdata.dat;
+      file = MLdata.dat;                  ! data file
 
   VARIABLE:
-      NAMES ARE CL TE N RS time person;
-      USEVARIABLES = CL TE N;
-      BETWEEN = N;
-      CLUSTER = person;
-      LAGGED = CL(1) TE(1);
-      TINTERVAL = time(1);
+      NAMES ARE CL TE N RS time person;   ! variables names (in the order they appear in the
+      USEVARIABLES = CL TE N;             ! which variables to include in the analysis
+      BETWEEN = N;                        ! which variable only has between-person variance
+      CLUSTER = person;                   ! which variable indicates the clustering of the d
+      LAGGED = CL(1) TE(1);               ! create lagged versions of CL and TE (lag 1)
+      TINTERVAL = time(1);                ! which variable indicates the timing of observati
 
-  ! DEFINE:	
-  !   CENTER N (GRANDMEAN);
+  !DEFINE:	
+  !    CENTER N (GRANDMEAN);               ! use grand mean centering for the between level
 
   ANALYSIS:
-      TYPE = TWOLEVEL RANDOM;
-      ESTIMATOR = BAYES;
-      PROC = 4;
-      BITER = (5000);
+      TYPE = TWOLEVEL RANDOM;             ! two-level data and allow for random slopes and/o
+      ESTIMATOR = BAYES;                  ! use Bayesian estimation
+      PROC = 2;                           ! use 2 processors
+      BITER = (5000);                     ! run at least 5000 iterations (more if needed acc
 
   MODEL:
       %WITHIN%
-      phiCL | CL ON CL&1;
-      betaCL | CL ON TE;
-      phiTE | TE ON TE&1;
-      betaTE | TE ON CL&1;
-      logVCL | CL;
-      logVTE | TE;
+      phiCL | CL ON CL&1;                 ! random autoregression for CL
+      betaCL | CL ON TE;                  ! random cross-regression from TE_t -> CL_t
+      phiTE | TE ON TE&1;                 ! random autoregression for TE
+      betaTE | TE ON CL&1;                ! random cross-lagged regression from CL_t-1 -> TE
+      logVCL | CL;                        ! random residual variance for CL
+      logVTE | TE;                        ! random residual variance for TE
 
       %BETWEEN%
-      CL TE phiCL-logVTE ON N;
+      CL TE phiCL-logVTE ON N;            ! regress all 8 random effects (2 means, 4 slopes,
 
   OUTPUT:
-       TECH1 TECH8 STDYX;
+      TECH1 TECH8 STDYX;                  ! obtain additional output
 
   PLOT:
-      TYPE = PLOT3;
-      FACTOR = ALL(100);
+      TYPE = PLOT3;                       ! enable plot options
+      FACTOR = ALL(100);                  ! sample factor scores (for the random effects) pe
 
 
 <a name='inputmessages' class='heading'></a>
@@ -125,7 +125,31 @@ MUTHEN & MUTHEN<br />
 *** WARNING
   Input line exceeded 90 characters. Some input may be truncated.
          - all random effects are regressed on an observed predictor; this variable is NOT ce
-   1 WARNING(S) FOUND IN THE INPUT INSTRUCTIONS
+*** WARNING
+  Input line exceeded 90 characters. Some input may be truncated.
+      BETWEEN = N;                        ! which variable only has between-person variance (
+*** WARNING
+  Input line exceeded 90 characters. Some input may be truncated.
+      CLUSTER = person;                   ! which variable indicates the clustering of the da
+*** WARNING
+  Input line exceeded 90 characters. Some input may be truncated.
+      TINTERVAL = time(1);                ! which variable indicates the timing of observatio
+*** WARNING
+  Input line exceeded 90 characters. Some input may be truncated.
+  !    CENTER N (GRANDMEAN);               ! use grand mean centering for the between level v
+*** WARNING
+  Input line exceeded 90 characters. Some input may be truncated.
+      TYPE = TWOLEVEL RANDOM;             ! two-level data and allow for random slopes and/or
+*** WARNING
+  Input line exceeded 90 characters. Some input may be truncated.
+      BITER = (5000);                     ! run at least 5000 iterations (more if needed acco
+*** WARNING
+  Input line exceeded 90 characters. Some input may be truncated.
+      betaTE | TE ON CL&1;                ! random cross-lagged regression from CL_t-1 -> TE_
+*** WARNING
+  Input line exceeded 90 characters. Some input may be truncated.
+      FACTOR = ALL(100);                  ! sample factor scores (for the random effects) per
+   9 WARNING(S) FOUND IN THE INPUT INSTRUCTIONS
 
 
 
@@ -289,8 +313,8 @@ Number of Free Parameters                              25
 
 Information Criteria
 
-          Deviance (DIC)                       129899.991
-          Estimated Number of Parameters (pD)   19235.898
+          Deviance (DIC)                       129850.549
+          Estimated Number of Parameters (pD)   19209.515
 
 
 
@@ -310,45 +334,45 @@ Between Level
     N                 -0.020       0.002      0.000      -0.024      -0.017      *
 
  PHITE      ON
-    N                  0.011       0.002      0.000       0.006       0.016      *
+    N                  0.011       0.002      0.000       0.007       0.016      *
 
  BETATE     ON
-    N                 -0.003       0.002      0.042      -0.007       0.001
+    N                 -0.003       0.002      0.042      -0.007       0.000
 
  LOGVCL     ON
-    N                  0.007       0.004      0.043      -0.001       0.015
+    N                  0.007       0.004      0.040      -0.001       0.014
 
  LOGVTE     ON
-    N                 -0.003       0.003      0.156      -0.007       0.003
+    N                 -0.002       0.002      0.172      -0.007       0.003
 
  CL         ON
     N                 -0.088       0.012      0.000      -0.111      -0.064      *
 
  TE         ON
-    N                  0.060       0.011      0.000       0.040       0.080      *
+    N                  0.060       0.011      0.000       0.040       0.081      *
 
  TE       WITH
-    CL                -0.421       0.096      0.000      -0.621      -0.247      *
+    CL                -0.419       0.094      0.000      -0.622      -0.253      *
 
  Intercepts
-    CL                 9.369       0.593      0.000       8.225      10.536      *
-    TE                11.954       0.530      0.000      10.911      12.990      *
-    PHICL             -0.405       0.094      0.000      -0.583      -0.221      *
-    BETACL             0.801       0.089      0.000       0.626       0.974      *
-    PHITE             -0.461       0.118      0.000      -0.693      -0.225      *
-    BETATE             0.069       0.102      0.249      -0.133       0.265
-    LOGVCL            -0.324       0.197      0.054      -0.718       0.059
-    LOGVTE             0.097       0.130      0.233      -0.169       0.330
+    CL                 9.368       0.585      0.000       8.185      10.504      *
+    TE                11.934       0.533      0.000      10.903      12.981      *
+    PHICL             -0.399       0.097      0.000      -0.588      -0.204      *
+    BETACL             0.804       0.093      0.000       0.627       0.985      *
+    PHITE             -0.463       0.118      0.000      -0.700      -0.235      *
+    BETATE             0.064       0.101      0.261      -0.129       0.272
+    LOGVCL            -0.318       0.195      0.051      -0.693       0.061
+    LOGVTE             0.082       0.122      0.257      -0.169       0.309
 
  Residual Variances
-    CL                 1.294       0.151      0.000       1.038       1.620      *
-    TE                 1.079       0.115      0.000       0.880       1.333      *
-    PHICL              0.007       0.003      0.000       0.002       0.014      *
-    BETACL             0.013       0.003      0.000       0.007       0.020      *
-    PHITE              0.018       0.005      0.000       0.009       0.029      *
-    BETATE             0.011       0.004      0.000       0.006       0.019      *
-    LOGVCL             0.110       0.016      0.000       0.084       0.146      *
-    LOGVTE             0.015       0.006      0.000       0.006       0.030      *
+    CL                 1.289       0.147      0.000       1.043       1.609      *
+    TE                 1.080       0.117      0.000       0.882       1.337      *
+    PHICL              0.007       0.003      0.000       0.002       0.015      *
+    BETACL             0.013       0.003      0.000       0.006       0.020      *
+    PHITE              0.017       0.005      0.000       0.009       0.029      *
+    BETATE             0.011       0.004      0.000       0.005       0.019      *
+    LOGVCL             0.111       0.016      0.000       0.085       0.147      *
+    LOGVTE             0.016       0.006      0.000       0.008       0.029      *
 
 
 <a name='standardized_results' class='heading'>STANDARDIZED MODEL RESULTS</a>
@@ -362,71 +386,71 @@ STDYX Standardization
 Within-Level Standardized Estimates Averaged Over Clusters
 
  PHICL | CL ON
-    CL&1               0.238       0.012      0.000       0.213       0.261      *
+    CL&1               0.239       0.012      0.000       0.216       0.264      *
 
  BETACL | CL ON
-    TE                -0.179       0.010      0.000      -0.198      -0.161      *
+    TE                -0.178       0.010      0.000      -0.199      -0.160      *
 
  PHITE | TE ON
-    TE&1               0.094       0.013      0.000       0.065       0.118      *
+    TE&1               0.095       0.015      0.000       0.065       0.123      *
 
  BETATE | TE ON
-    CL&1              -0.110       0.013      0.000      -0.136      -0.086      *
+    CL&1              -0.112       0.014      0.000      -0.137      -0.083      *
 
  LOGVCL |
-    CL                 0.848       0.007      0.000       0.833       0.863      *
+    CL                 0.848       0.008      0.000       0.831       0.863      *
 
  LOGVTE |
-    TE                 0.929       0.007      0.000       0.915       0.942      *
+    TE                 0.929       0.007      0.000       0.915       0.943      *
 
 Between Level
 
  PHICL      ON
-    N                  0.610       0.109      0.000       0.420       0.848      *
+    N                  0.602       0.102      0.000       0.407       0.813      *
 
  BETACL     ON
-    N                 -0.676       0.059      0.000      -0.790      -0.557      *
+    N                 -0.678       0.062      0.000      -0.800      -0.558      *
 
  PHITE      ON
-    N                  0.393       0.087      0.000       0.226       0.564      *
+    N                  0.401       0.088      0.000       0.230       0.572      *
 
  BETATE     ON
-    N                 -0.163       0.097      0.042      -0.357       0.025
+    N                 -0.157       0.095      0.042      -0.356       0.021
 
  LOGVCL     ON
-    N                  0.104       0.059      0.043      -0.013       0.220
+    N                  0.103       0.058      0.040      -0.013       0.215
 
  LOGVTE     ON
-    N                 -0.109       0.115      0.156      -0.337       0.110
+    N                 -0.096       0.098      0.172      -0.275       0.102
 
  CL         ON
-    N                 -0.365       0.045      0.000      -0.449      -0.273      *
+    N                 -0.366       0.044      0.000      -0.445      -0.272      *
 
  TE         ON
-    N                  0.282       0.048      0.000       0.185       0.373      *
+    N                  0.283       0.048      0.000       0.186       0.372      *
 
  TE       WITH
-    CL                -0.357       0.065      0.000      -0.476      -0.222      *
+    CL                -0.357       0.064      0.000      -0.476      -0.226      *
 
  Intercepts
-    CL                 7.659       0.495      0.000       6.660       8.598      *
-    TE                11.030       0.819      0.000       9.446      12.691      *
-    PHICL             -3.767       0.889      0.000      -5.470      -2.038      *
-    BETACL             5.285       0.538      0.000       4.164       6.291      *
-    PHITE             -3.191       0.828      0.000      -4.776      -1.582      *
-    BETATE             0.650       0.960      0.249      -1.238       2.504
-    LOGVCL            -0.968       0.584      0.054      -2.097       0.180
-    LOGVTE             0.776       1.120      0.233      -1.390       3.062
+    CL                 7.687       0.490      0.000       6.652       8.574      *
+    TE                11.011       0.835      0.000       9.414      12.682      *
+    PHICL             -3.672       0.862      0.000      -5.328      -1.951      *
+    BETACL             5.299       0.557      0.000       4.189       6.356      *
+    PHITE             -3.254       0.837      0.000      -4.878      -1.655      *
+    BETATE             0.603       0.951      0.261      -1.259       2.527
+    LOGVCL            -0.958       0.577      0.051      -2.065       0.180
+    LOGVTE             0.650       0.961      0.257      -1.314       2.383
 
  Residual Variances
-    CL                 0.867       0.033      0.000       0.798       0.926      *
-    TE                 0.921       0.027      0.000       0.860       0.966      *
-    PHICL              0.628       0.138      0.000       0.281       0.824      *
-    BETACL             0.543       0.080      0.000       0.375       0.690      *
-    PHITE              0.846       0.070      0.000       0.682       0.949      *
-    BETATE             0.973       0.035      0.000       0.873       1.000      *
-    LOGVCL             0.989       0.013      0.000       0.952       1.000      *
-    LOGVTE             0.987       0.036      0.000       0.887       1.000      *
+    CL                 0.866       0.032      0.000       0.802       0.926      *
+    TE                 0.920       0.027      0.000       0.862       0.965      *
+    PHICL              0.637       0.124      0.000       0.337       0.834      *
+    BETACL             0.540       0.084      0.000       0.361       0.689      *
+    PHITE              0.839       0.071      0.000       0.673       0.947      *
+    BETATE             0.975       0.034      0.000       0.873       1.000      *
+    LOGVCL             0.989       0.013      0.000       0.953       1.000      *
+    LOGVTE             0.990       0.022      0.000       0.924       1.000      *
 
 
 <a name='rsquare' class='heading'>R-SQUARE</a>
@@ -436,26 +460,26 @@ Within-Level R-Square Averaged Across Clusters
                                 Posterior  One-Tailed         95% C.I.
     Variable        Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%
 
-    CL                 0.152       0.007      0.000       0.137       0.167
-    TE                 0.071       0.007      0.000       0.058       0.085
+    CL                 0.152       0.008      0.000       0.137       0.169
+    TE                 0.071       0.007      0.000       0.057       0.085
 
 Between Level
 
                                 Posterior  One-Tailed         95% C.I.
     Variable        Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%
 
-    CL                 0.133       0.033      0.000       0.074       0.202
-    TE                 0.079       0.027      0.000       0.034       0.139
+    CL                 0.134       0.032      0.000       0.074       0.198
+    TE                 0.080       0.027      0.000       0.035       0.138
 
                                 Posterior  One-Tailed         95% C.I.
     Variable        Estimate       S.D.      P-Value   Lower 2.5%  Upper 2.5%
 
-    PHICL              0.372       0.138      0.000       0.176       0.719
-    BETACL             0.457       0.080      0.000       0.310       0.624
-    PHITE              0.154       0.070      0.000       0.051       0.318
-    BETATE             0.027       0.035      0.000       0.000       0.127
-    LOGVCL             0.011       0.013      0.000       0.000       0.048
-    LOGVTE             0.013       0.036      0.000       0.000       0.113
+    PHICL              0.363       0.124      0.000       0.166       0.661
+    BETACL             0.460       0.084      0.000       0.311       0.639
+    PHITE              0.161       0.071      0.000       0.053       0.327
+    BETATE             0.025       0.034      0.000       0.000       0.126
+    LOGVCL             0.011       0.013      0.000       0.000       0.046
+    LOGVTE             0.010       0.022      0.000       0.000       0.076
 
 
 <a name='tech1_output' class='heading'>TECHNICAL 1 OUTPUT</a>
@@ -790,64 +814,62 @@ Between Level
 
    TECHNICAL 8 OUTPUT FOR BAYES ESTIMATION
 
-     PROCESSOR    BSEED
-     1            0
-     2            285380
-     3            253358
-     4            93468
+     CHAIN    BSEED
+     1        0
+     2        285380
 
                      POTENTIAL       PARAMETER WITH
      ITERATION    SCALE REDUCTION      HIGHEST PSR
-     100              1.229               3
-     200              1.349               1
-     300              1.168               1
-     400              1.114               17
-     500              1.051               1
-     600              1.033               3
-     700              1.047               3
-     800              1.023               17
-     900              1.023               17
-     1000             1.024               1
-     1100             1.058               6
-     1200             1.026               6
-     1300             1.024               1
-     1400             1.017               6
-     1500             1.013               6
-     1600             1.033               6
-     1700             1.049               6
-     1800             1.044               6
-     1900             1.027               6
-     2000             1.032               22
-     2100             1.033               22
-     2200             1.042               22
-     2300             1.064               22
-     2400             1.073               22
-     2500             1.049               22
-     2600             1.022               22
-     2700             1.015               6
-     2800             1.020               6
-     2900             1.032               6
-     3000             1.015               6
-     3100             1.022               22
-     3200             1.022               22
-     3300             1.019               6
-     3400             1.028               22
-     3500             1.032               22
-     3600             1.039               22
-     3700             1.035               22
-     3800             1.052               6
-     3900             1.048               6
-     4000             1.029               6
-     4100             1.029               6
-     4200             1.019               6
-     4300             1.019               6
-     4400             1.020               6
-     4500             1.026               6
-     4600             1.032               6
-     4700             1.028               6
-     4800             1.022               6
-     4900             1.028               6
-     5000             1.027               6
+     100              1.245               1
+     200              1.314               3
+     300              1.265               1
+     400              1.127               22
+     500              1.055               22
+     600              1.031               22
+     700              1.043               19
+     800              1.048               19
+     900              1.024               19
+     1000             1.031               1
+     1100             1.029               1
+     1200             1.013               17
+     1300             1.030               22
+     1400             1.046               22
+     1500             1.068               6
+     1600             1.053               6
+     1700             1.041               6
+     1800             1.032               6
+     1900             1.024               6
+     2000             1.015               1
+     2100             1.019               22
+     2200             1.038               22
+     2300             1.042               22
+     2400             1.082               22
+     2500             1.110               22
+     2600             1.135               22
+     2700             1.144               22
+     2800             1.142               22
+     2900             1.144               22
+     3000             1.116               22
+     3100             1.099               22
+     3200             1.077               22
+     3300             1.065               22
+     3400             1.057               22
+     3500             1.050               22
+     3600             1.037               22
+     3700             1.031               22
+     3800             1.027               22
+     3900             1.021               22
+     4000             1.019               3
+     4100             1.019               3
+     4200             1.019               3
+     4300             1.011               3
+     4400             1.010               3
+     4500             1.009               3
+     4600             1.010               3
+     4700             1.010               3
+     4800             1.006               3
+     4900             1.003               3
+     5000             1.004               1
 
 
 <a name='summary_plausible' class='heading'>SUMMARIES OF PLAUSIBLE VALUES (N = NUMBER OF OBSERVATIONS * NUMBER OF IMPUTATIONS)</a>
@@ -859,55 +881,55 @@ Between Level
            Means
               PHICL         BETACL        PHITE         BETATE        LOGVCL
               ________      ________      ________      ________      ________
-                0.242        -0.209         0.097        -0.092         0.018
+                0.252        -0.199         0.095        -0.099         0.018
 
 
            Means
               LOGVTE        B_CL          B_TE
               ________      ________      ________
-               -0.043         5.009        14.926
+               -0.032         5.001        14.932
 
 
            Covariances
               PHICL         BETACL        PHITE         BETATE        LOGVCL
               ________      ________      ________      ________      ________
- PHICL          0.016
- BETACL        -0.014         0.033
- PHITE          0.008        -0.012         0.027
- BETATE        -0.002         0.003        -0.002         0.012
- LOGVCL         0.005        -0.009         0.004        -0.001         0.109
- LOGVTE        -0.001         0.002        -0.002         0.000         0.000
- B_CL          -0.061         0.089        -0.051         0.016        -0.026
- B_TE           0.036        -0.049         0.031        -0.006         0.044
+ PHICL          0.013
+ BETACL        -0.012         0.034
+ PHITE          0.006        -0.011         0.017
+ BETATE        -0.002         0.003        -0.002         0.011
+ LOGVCL         0.005        -0.009         0.004         0.000         0.107
+ LOGVTE        -0.001         0.003        -0.002         0.001        -0.001
+ B_CL          -0.056         0.092        -0.047         0.018        -0.043
+ B_TE           0.033        -0.052         0.032        -0.008         0.054
 
 
            Covariances
               LOGVTE        B_CL          B_TE
               ________      ________      ________
- LOGVTE         0.017
- B_CL          -0.005         1.632
- B_TE          -0.006        -0.671         1.228
+ LOGVTE         0.013
+ B_CL           0.001         1.733
+ B_TE          -0.010        -0.722         1.254
 
 
            Correlations
               PHICL         BETACL        PHITE         BETATE        LOGVCL
               ________      ________      ________      ________      ________
  PHICL          1.000
- BETACL        -0.611         1.000
- PHITE          0.372        -0.398         1.000
- BETATE        -0.120         0.144        -0.092         1.000
- LOGVCL         0.120        -0.149         0.080        -0.019         1.000
- LOGVTE        -0.063         0.082        -0.074         0.020         0.000
- B_CL          -0.384         0.384        -0.241         0.114        -0.062
- B_TE           0.257        -0.244         0.169        -0.050         0.121
+ BETACL        -0.586         1.000
+ PHITE          0.409        -0.453         1.000
+ BETATE        -0.166         0.174        -0.127         1.000
+ LOGVCL         0.127        -0.153         0.093        -0.006         1.000
+ LOGVTE        -0.110         0.119        -0.116         0.058        -0.014
+ B_CL          -0.376         0.381        -0.270         0.132        -0.099
+ B_TE           0.257        -0.253         0.216        -0.069         0.146
 
 
            Correlations
               LOGVTE        B_CL          B_TE
               ________      ________      ________
  LOGVTE         1.000
- B_CL          -0.032         1.000
- B_TE          -0.044        -0.474         1.000
+ B_CL           0.009         1.000
+ B_TE          -0.075        -0.490         1.000
 
 
 <a name='summary_plausible_stdev' class='heading'>SUMMARY OF PLAUSIBLE STANDARD DEVIATION (N = NUMBER OF OBSERVATIONS)</a>
@@ -919,13 +941,13 @@ Between Level
            Means
               PHICL_SD      BETACL_S      PHITE_SD      BETATE_S      LOGVCL_S
               ________      ________      ________      ________      ________
-                0.074         0.086         0.117         0.090         0.160
+                0.070         0.088         0.095         0.086         0.168
 
 
            Means
               LOGVTE_S      B_CL_SD       B_TE_SD
               ________      ________      ________
-                0.106         0.193         0.161
+                0.096         0.189         0.155
 
 
            Covariances
@@ -945,29 +967,29 @@ Between Level
               LOGVTE_S      B_CL_SD       B_TE_SD
               ________      ________      ________
  LOGVTE_S       0.000
- B_CL_SD        0.000         0.013
- B_TE_SD        0.000         0.008         0.005
+ B_CL_SD        0.000         0.004
+ B_TE_SD        0.000         0.001         0.001
 
 
            Correlations
               PHICL_SD      BETACL_S      PHITE_SD      BETATE_S      LOGVCL_S
               ________      ________      ________      ________      ________
  PHICL_SD       1.000
- BETACL_S       0.112         1.000
- PHITE_SD       0.129         0.055         1.000
- BETATE_S       0.163        -0.143         0.071         1.000
- LOGVCL_S       0.043        -0.127         0.019         0.125         1.000
- LOGVTE_S       0.111        -0.026        -0.019        -0.082         0.060
- B_CL_SD       -0.165        -0.006         0.112        -0.349        -0.127
- B_TE_SD       -0.128        -0.105         0.155        -0.204        -0.094
+ BETACL_S       0.100         1.000
+ PHITE_SD       0.048         0.066         1.000
+ BETATE_S       0.093        -0.304         0.022         1.000
+ LOGVCL_S       0.034        -0.107        -0.035         0.103         1.000
+ LOGVTE_S      -0.100         0.039         0.001         0.139        -0.008
+ B_CL_SD       -0.168         0.228         0.233        -0.448        -0.041
+ B_TE_SD       -0.114        -0.002         0.371        -0.160         0.064
 
 
            Correlations
               LOGVTE_S      B_CL_SD       B_TE_SD
               ________      ________      ________
  LOGVTE_S       1.000
- B_CL_SD       -0.014         1.000
- B_TE_SD        0.015         0.935         1.000
+ B_CL_SD        0.066         1.000
+ B_TE_SD        0.045         0.749         1.000
 
 
 <a name='plot_info' class='heading'>PLOT INFORMATION</a>
@@ -993,9 +1015,9 @@ DIAGRAM INFORMATION
   No diagram output was produced.
 
 
-     Beginning Time:  10:33:23
-        Ending Time:  10:37:45
-       Elapsed Time:  00:04:22
+     Beginning Time:  10:39:10
+        Ending Time:  10:42:34
+       Elapsed Time:  00:03:24
 
 
 

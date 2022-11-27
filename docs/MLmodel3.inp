@@ -8,36 +8,37 @@ TITLE: Multilevel DSEM model 3 with TINTERVAL
        - all random effects are allowed to be correlated
 
 DATA:
-    file = MLdata.dat;
+    file = MLdata.dat;                  ! data file
     
 VARIABLE:
-    NAMES ARE CL TE N RS time person; 
-    USEVARIABLES = CL TE;
-    CLUSTER = person;
-    LAGGED = CL(1) TE(1);
-    TINTERVAL = time(1);
+    NAMES ARE CL TE N RS time person;   ! variables names (in the order they appear in the data file) 
+    USEVARIABLES = CL TE;               ! which variables to include in the analysis
+    CLUSTER = person;                   ! which variable indicates the clustering of the data
+    LAGGED = CL(1) TE(1);               ! create lagged versions of CL and TE (lag 1)
+    TINTERVAL = time(1);                ! which variable indicates the timing of observations; obtain results for an interval of 1 on this timescale
 
 ANALYSIS:   
-    TYPE = TWOLEVEL RANDOM;
-    ESTIMATOR = BAYES;
-    PROC = 2;
-    BITER = (5000);  
+    TYPE = TWOLEVEL RANDOM;             ! two-level data and allow for random slopes and/or random residual variances
+    ESTIMATOR = BAYES;                  ! use Bayesian estimation
+    PROC = 2;                           ! use 2 processors
+    BITER = (5000);                     ! run at least 5000 iterations (more if needed according to PSR)
 
 MODEL: 
     %WITHIN%
-    phiCL | CL ON CL&1;
-    betaCL | CL ON TE;
-    phiTE | TE ON TE&1;
-    betaTE | TE ON CL&1;
-    logVCL | CL;
-    logVTE | TE;
+    phiCL | CL ON CL&1;                 ! random autoregression for CL
+    betaCL | CL ON TE;                  ! random cross-regression from TE_t -> CL_t
+    phiTE | TE ON TE&1;                 ! random autoregression for TE
+    betaTE | TE ON CL&1;                ! random cross-lagged regression from CL_t-1 -> TE_t
+    logVCL | CL;                        ! random residual variance for CL
+    logVTE | TE;                        ! random residual variance for TE
 
     %BETWEEN%
-    CL TE phiCL-logVTE WITH TE phiCL-logVTE;
+    CL TE phiCL-logVTE WITH 
+            TE phiCL-logVTE;            ! allow all 8 random effects (2 means, 4 slopes, 2 log residual variances) to covary
 
 OUTPUT:
-    TECH1 TECH8 STDYX;
+    TECH1 TECH8 STDYX;                  ! obtain additional output
 
 PLOT:
-    TYPE = PLOT3;
-    FACTOR = ALL(100);
+    TYPE = PLOT3;                       ! enable plot options 
+    FACTOR = ALL(100);                  ! sample factor scores (for the random effects) per person

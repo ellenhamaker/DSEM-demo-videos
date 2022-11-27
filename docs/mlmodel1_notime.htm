@@ -43,7 +43,7 @@ a:visited
 <p class="heading">
 Mplus VERSION 8.8<br />
 MUTHEN & MUTHEN<br />
-11/24/2022   9:39 AM<br />
+11/27/2022   9:56 AM<br />
 </p>
 
 <p class='heading'>OUTPUT SECTIONS</p>
@@ -77,40 +77,49 @@ MUTHEN & MUTHEN<br />
          - only random means
 
   DATA:
-      file = MLdata.dat;
+      file = MLdata.dat;                  ! data file
 
   VARIABLE:
-      NAMES ARE CL TE N RS time person;
-      USEVARIABLES = CL TE;
-      CLUSTER = person;
-      LAGGED = CL(1) TE(1);
+      NAMES ARE CL TE N RS time person;   ! variables names (in the order they appear in the
+      USEVARIABLES = CL TE;               ! which variables to include in the analysis
+      CLUSTER = person;                   ! which variable indicates the clustering of the d
+      LAGGED = CL(1) TE(1);               ! create lagged versions of CL and TE (lag 1)
 
   ANALYSIS:
-      TYPE = TWOLEVEL;
-      ESTIMATOR = BAYES;
-      PROC = 2;
-      BITER = (5000);
+      TYPE = TWOLEVEL;                    ! two-level data
+      ESTIMATOR = BAYES;                  ! use Bayesian estimation
+      PROC = 2;                           ! use 2 processors
+      BITER = (5000);                     ! run at least 5000 iterations (more if needed acc
 
   MODEL:
       %WITHIN%
-      CL ON CL&1;
-      CL ON TE;
-      TE ON TE&1;
-      TE ON CL&1;
+      CL ON CL&1;                         ! autoregression for CL
+      CL ON TE;                           ! cross-regression from TE_t -> CL_t
+      TE ON TE&1;                         ! autoregression for TE
+      TE ON CL&1;                         ! cross-lagged regression CL_t-1 -> TE_t
 
       %BETWEEN%
-      CL WITH TE;
+      CL WITH TE;                         ! person mean on CL covaries with person mean on T
 
   OUTPUT:
-      TECH1 TECH8 STDYX;
+      TECH1 TECH8 STDYX;                  ! obtain additional output
 
   PLOT:
-      TYPE = PLOT3;
+      TYPE = PLOT3;                       ! enable plot options
 
 
 <a name='inputmessages' class='heading'></a>
 
-INPUT READING TERMINATED NORMALLY
+*** WARNING
+  Input line exceeded 90 characters. Some input may be truncated.
+      CLUSTER = person;                   ! which variable indicates the clustering of the da
+*** WARNING
+  Input line exceeded 90 characters. Some input may be truncated.
+      BITER = (5000);                     ! run at least 5000 iterations (more if needed acco
+*** WARNING
+  Input line exceeded 90 characters. Some input may be truncated.
+      CL WITH TE;                         ! person mean on CL covaries with person mean on TE
+   3 WARNING(S) FOUND IN THE INPUT INSTRUCTIONS
 
 
 
@@ -621,8 +630,8 @@ DIAGRAM INFORMATION
   No diagram output was produced.
 
 
-     Beginning Time:  09:39:56
-        Ending Time:  09:40:00
+     Beginning Time:  09:56:40
+        Ending Time:  09:56:44
        Elapsed Time:  00:00:04
 
 
